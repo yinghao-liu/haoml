@@ -1,4 +1,10 @@
 #clear
 ##help
 	#sdsdfsd
-[table]
+
+#table name is table_a
+[table_a]
+a=1
+#table_a.b
+b=2
+

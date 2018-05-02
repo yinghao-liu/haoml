@@ -4,6 +4,7 @@ using namespace std;
 using namespace haoml;
 int main(void)
 {
-	value config("config.haoml"); 
+	parser config; 
+	config.build("config.haoml"); 
 	return 0;
 }
