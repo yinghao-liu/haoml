@@ -61,6 +61,7 @@ shared_ptr<table> parser::build(const char *filename)
 				_table.clear();
 				annot.clear();
 				tab_annot.clear();
+				base_ptr = nullptr;
 
 			}
 			cout<<"null line"<<endl;
@@ -256,6 +257,17 @@ void mapp::insert(string &key, string &value, string &annot)
 	_mapp[key]._mapvalue = value;
 	_mapp[key].set_annot(annot);
 }
+void mapp::show_mapp(const string &table_name)
+{
+	cout<<get_annot();
+	cout<<"["<<table_name<<"]"<<endl;
+
+	for (auto &i : _mapp){
+		cout<<i.second.get_annot();
+		cout<<i.first<<"="<<i.second._mapvalue<<endl;
+	}
+	cout<<endl;
+}
 /***********array*************/
 const bool arrayy::is_arrayy(void)
 {
@@ -267,6 +279,22 @@ void arrayy::append(vector<string> &data, string &annot)
 	value.set_annot(annot);
 	value._arrayvalue = data;
 	_arrayy.push_back(value);
+}
+void arrayy::show_arrayy(const string &table_name)
+{
+	cout<<get_annot();
+	cout<<"["<<table_name<<"]"<<endl;
+	for (auto &i : _arrayy){
+		cout<<i.get_annot();
+		string data;
+		for (auto &j : i._arrayvalue){
+			data+=j;
+			data+='|';
+		}
+		data.pop_back();
+		cout<<data<<endl;
+	}
+	cout<<endl;
 }
 /*************table**************/
 const bool table::is_table(void)
@@ -289,7 +317,21 @@ map<string, shared_ptr<base>>::iterator table::end(void)
 {
 	return _table.end();
 }
+map<string, shared_ptr<base>>::iterator table::begin(void)
+{
+	return _table.begin();
+}
 
-
-
+void table::show_table(void)
+{
+	cout<<get_annot()<<endl;;
+	for (auto &i : _table){
+		if (i.second->is_mapp()){
+			i.second->as_mapp()->show_mapp(i.first);
+		}
+		if (i.second->is_arrayy()){
+			i.second->as_arrayy()->show_arrayy(i.first);
+		}
+	}
+}
 

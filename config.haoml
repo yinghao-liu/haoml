@@ -8,3 +8,8 @@ a=1
 #table_a.b
 b=2
 
+#table name is array_b
+[array_b]
+#123
+1|2|3
+

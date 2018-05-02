@@ -67,6 +67,16 @@ public:
 	string _mapvalue;
 };//end of mapvalue 
 
+
+class mapp  : public base{
+public:
+	virtual const bool is_mapp(void) override;
+	void insert(string &key, string &value, string &annot);
+	void show_mapp(const string &table_name);
+private:
+	map<string, mapvalue> _mapp;
+};//end of mapp
+
 class arrayvalue : public base{
 public:
 	virtual const bool is_arrayvalue(void) override;
@@ -74,19 +84,12 @@ public:
 	vector<string> _arrayvalue;
 };//end of arrayvalue 
 
-class mapp  : public base{
-public:
-	virtual const bool is_mapp(void) override;
-	void insert(string &key, string &value, string &annot);
-private:
-	map<string, mapvalue> _mapp;
-};//end of mapp
-
 class arrayy : public base{
 public:
 	virtual const bool is_arrayy(void) override;
 	void append(vector<string> &data, string &annot);
-
+	void show_arrayy(const string &table_name);
+private:
 	vector<arrayvalue> _arrayy;
 };//end of array
 
@@ -96,8 +99,11 @@ public:
 	const shared_ptr<base> get(string &key);	
 	shared_ptr<base> &operator[](string &key);
 	bool empty(void);
+	void show_table(void);
+
 	map<string, shared_ptr<base>>::iterator find(string &key);
 	map<string, shared_ptr<base>>::iterator end(void);
+	map<string, shared_ptr<base>>::iterator begin(void);
 
 	map<string, shared_ptr<base>> _table;
 };//end of table

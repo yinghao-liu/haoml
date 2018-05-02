@@ -5,6 +5,7 @@ using namespace haoml;
 int main(void)
 {
 	parser config; 
-	config.build("config.haoml"); 
+	auto ptr = config.build("config.haoml");
+	ptr->show_table();
 	return 0;
 }
