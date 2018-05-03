@@ -18,14 +18,6 @@ shared_ptr<arrayy> parser::make_arrayy(void)
 {
 	return make_shared<arrayy>();
 }
-shared_ptr<mapvalue> parser::make_mapvalue(void)
-{
-	return make_shared<mapvalue>();
-}
-shared_ptr<arrayvalue> parser::make_arrayvalue(void)
-{
-	return make_shared<arrayvalue>();
-}
 
 shared_ptr<table> parser::build(const char *filename)
 {
@@ -186,14 +178,6 @@ const bool base::is_arrayy(void)
 {
 	return false;
 }
-const bool base::is_mapvalue(void)
-{
-	return false;
-}
-const bool base::is_arrayvalue(void)
-{
-	return false;
-}
 shared_ptr<table> base::as_table(void)
 {
 	if (is_table()){
@@ -215,20 +199,7 @@ shared_ptr<arrayy> base::as_arrayy(void)
 	}
 	return nullptr;
 }
-/*shared_ptr<mapvalue> base::as_mapvalue(void)
-{
-	if (is_mapvalue()){
-		return static_pointer_cast<mapvalue>(shared_from_this());
-	}
-	return nullptr;
-}*/
-shared_ptr<arrayvalue> base::as_arrayvalue(void)
-{
-	if (is_arrayvalue()){
-		return static_pointer_cast<arrayvalue>(shared_from_this());
-	}
-	return nullptr;
-}
+
 void base::set_annot(string &annot)
 {
 	annotation = annot;
@@ -237,16 +208,6 @@ string & base::get_annot(void)
 {
 	return annotation;
 }
-/**************mapvalue****************/
-const bool mapvalue::is_mapvalue(void)
-{
-	return true;
-}
-/**************arrayvalue****************/
-const bool arrayvalue::is_arrayvalue(void)
-{
-	return true;
-}
 /**************mapp***************/
 const bool mapp::is_mapp(void)
 {
@@ -254,8 +215,8 @@ const bool mapp::is_mapp(void)
 }
 void mapp::insert(string &key, string &value, string &annot)
 {
-	_mapp[key]._mapvalue = value;
-	_mapp[key].set_annot(annot);
+	_mapp[key]._mapvalue  = value;
+	_mapp[key].annotation = annot;
 }
 void mapp::show_mapp(const string &table_name)
 {
@@ -263,10 +224,15 @@ void mapp::show_mapp(const string &table_name)
 	cout<<"["<<table_name<<"]"<<endl;
 
 	for (auto &i : _mapp){
-		cout<<i.second.get_annot();
+		cout<<i.second.annotation;
 		cout<<i.first<<"="<<i.second._mapvalue<<endl;
 	}
 	cout<<endl;
+}
+
+string &mapp::index(const string &key)
+{
+	return _mapp[key]._mapvalue;
 }
 /***********array*************/
 const bool arrayy::is_arrayy(void)
@@ -276,7 +242,7 @@ const bool arrayy::is_arrayy(void)
 void arrayy::append(vector<string> &data, string &annot)
 {
 	arrayvalue value;
-	value.set_annot(annot);
+	value.annotation  = annot;
 	value._arrayvalue = data;
 	_arrayy.push_back(value);
 }
@@ -285,7 +251,7 @@ void arrayy::show_arrayy(const string &table_name)
 	cout<<get_annot();
 	cout<<"["<<table_name<<"]"<<endl;
 	for (auto &i : _arrayy){
-		cout<<i.get_annot();
+		cout<<i.annotation;
 		string data;
 		for (auto &j : i._arrayvalue){
 			data+=j;
@@ -296,12 +262,16 @@ void arrayy::show_arrayy(const string &table_name)
 	}
 	cout<<endl;
 }
+vector<string> &arrayy::index(size_t num)
+{
+	return _arrayy[num]._arrayvalue;
+}
 /*************table**************/
 const bool table::is_table(void)
 {
 	return true;
 }
-shared_ptr<base> &table::operator[](string &key)
+shared_ptr<base> &table::operator[](const string &key)
 {
 	return _table[key];
 }

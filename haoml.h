@@ -12,31 +12,25 @@ using std::shared_ptr;
 namespace haoml{
 
 class base;
-class table;
 class mapp;
 class arrayy;
-class mapvalue;
-class arrayvalue;
-
+class table;
 
 
 class parser{
 public:
 	parser(void){};
-	parser& operator=(const parser& parser) = delete;
+	parser& operator=(const parser &pa) = delete;
 	shared_ptr<table> build(const char *filename);
 protected:
 	shared_ptr<table> make_table(void);
 	shared_ptr<mapp> make_mapp(void);
 	shared_ptr<arrayy> make_arrayy(void);
-	shared_ptr<mapvalue> make_mapvalue(void);
-	shared_ptr<arrayvalue> make_arrayvalue(void);
 	shared_ptr<base> parser_data(string &data, string &annot, shared_ptr<base> &base_ptr);
 
 	string strip(string &str);
 	vector<string> split(char delimit, const string &str);
 private:
-	//map<>
 };//end class value
 
 
@@ -46,24 +40,18 @@ public:
 	virtual const bool is_table(void);
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
-	virtual const bool is_mapvalue(void);
-	virtual const bool is_arrayvalue(void);
 	
 	void set_annot(string &annot);
 	string &get_annot(void);
 	shared_ptr<table> as_table(void);
 	shared_ptr<mapp>  as_mapp(void);
 	shared_ptr<arrayy> as_arrayy(void);
-	//shared_ptr<mapvalue> 	as_mapvalue(void);
-	shared_ptr<arrayvalue> 	as_arrayvalue(void);
 private:
 	string annotation;
 };//end of base
 
-class mapvalue : public base{
-public:
-	virtual const bool is_mapvalue(void) override;
-
+struct mapvalue{
+	string annotation;
 	string _mapvalue;
 };//end of mapvalue 
 
@@ -73,14 +61,14 @@ public:
 	virtual const bool is_mapp(void) override;
 	void insert(string &key, string &value, string &annot);
 	void show_mapp(const string &table_name);
+
+	string &index(const string &key);
 private:
 	map<string, mapvalue> _mapp;
 };//end of mapp
 
-class arrayvalue : public base{
-public:
-	virtual const bool is_arrayvalue(void) override;
-
+struct arrayvalue{
+	string annotation;
 	vector<string> _arrayvalue;
 };//end of arrayvalue 
 
@@ -89,6 +77,7 @@ public:
 	virtual const bool is_arrayy(void) override;
 	void append(vector<string> &data, string &annot);
 	void show_arrayy(const string &table_name);
+	vector<string> &index(size_t num);
 private:
 	vector<arrayvalue> _arrayy;
 };//end of array
@@ -96,10 +85,9 @@ private:
 class table : public base{
 public:
 	virtual const bool is_table(void) override;
-	const shared_ptr<base> get(string &key);	
-	shared_ptr<base> &operator[](string &key);
 	bool empty(void);
 	void show_table(void);
+	shared_ptr<base> &operator[](const string &key);
 
 	map<string, shared_ptr<base>>::iterator find(string &key);
 	map<string, shared_ptr<base>>::iterator end(void);
