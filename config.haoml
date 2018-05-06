@@ -2,14 +2,15 @@
 ##help
 	#sdsdfsd
 
+[123]
+
+[array_b]
+2|20|3
+2|2|3
+
 #table name is table_a
 [table_a]
-a=1
+a=1234a
 #table_a.b
-b=2
-
-#table name is array_b
-[array_b]
-#123
-1|2|3
+b=
 

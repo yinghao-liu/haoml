@@ -6,6 +6,10 @@ using namespace haoml;
 using std::make_shared;
 
 /***********parser***************/
+shared_ptr<base> parser::make_base(void)
+{
+	return make_shared<base>();
+}
 shared_ptr<table> parser::make_table(void)
 {
 	return make_shared<table>();
@@ -38,26 +42,29 @@ shared_ptr<table> parser::build(const char *filename)
 	size_t end;
 	while (1){
 		getline(fs, line);
-		if (!fs.good()){
-			break;
-		}
 		/*********here is end of a block or nothing************/	
 		if (0 == line.size()){
 			/****************config file head**********************/
 			if (root->empty() && !annot.empty()){
 				root->set_annot(annot);
-				annot.clear(); 
 			}
-			if (!_table.empty() && !tab_annot.empty() && nullptr != (*root)[_table]){
+			if (!_table.empty()){
+				if (nullptr == (*root)[_table]){
+					(*root)[_table] = make_base();
+				}
 				(*root)[_table]->set_annot(tab_annot);
 				_table.clear();
-				annot.clear();
 				tab_annot.clear();
 				base_ptr = nullptr;
 
 			}
-			cout<<"null line"<<endl;
-			continue;
+			annot.clear();
+
+			if (!fs.good()){
+				break;
+			}else{
+				continue;
+			}
 		}
 
 		switch (line[start=line.find_first_not_of("\t ")]){
@@ -85,12 +92,18 @@ shared_ptr<table> parser::build(const char *filename)
 			break;
 		default:
 			if (nullptr == parser_data(line, annot, base_ptr)){
-				return nullptr;
-			}
-			if (nullptr == (*root)[_table]){
-				(*root)[_table] = base_ptr;
+				annot.clear();
+				continue;
 			}
 			annot.clear();
+
+			if (_table.empty()){
+				base_ptr.reset();
+				continue;
+			}
+			if(nullptr==(*root)[_table]){
+				(*root)[_table] = base_ptr;
+			}
 		}
 	}
 	return root;	
@@ -119,22 +132,20 @@ shared_ptr<base> parser::parser_data(string &data, string &annot, shared_ptr<bas
 		return base_ptr;
 	}
 
-	delim = data.find('|');
-	if (string::npos != delim){//array mode
-		
-		if (nullptr == base_ptr){
-			base_ptr = make_arrayy();
-		}
-		if (!base_ptr->is_arrayy()){
-			cerr<<"mixed type"<<endl;
-			return nullptr;
-		}
-		shared_ptr<arrayy> array_ptr = base_ptr->as_arrayy();
-		auto vect_data = split('|', data);
-		array_ptr->append(vect_data, annot);
-		return base_ptr;	
+	//delim = data.find('|');
+	//if (string::npos != delim){//array mode
+
+	if (nullptr == base_ptr){
+		base_ptr = make_arrayy();
 	}
-	return nullptr;
+	if (!base_ptr->is_arrayy()){
+		cerr<<"mixed type"<<endl;
+		return nullptr;
+	}
+	shared_ptr<arrayy> array_ptr = base_ptr->as_arrayy();
+	auto vect_data = split('|', data);
+	array_ptr->append(vect_data, annot);
+	return base_ptr;	
 }
 string parser::strip(string &str)
 {
@@ -178,6 +189,13 @@ const bool base::is_arrayy(void)
 {
 	return false;
 }
+string base::get_data(const string &table_name)
+{
+	string base_out = get_annot();
+	base_out += "[" + table_name + "]" + '\n';
+	base_out += '\n';
+	return base_out;
+}
 shared_ptr<table> base::as_table(void)
 {
 	if (is_table()){
@@ -218,19 +236,28 @@ void mapp::insert(string &key, string &value, string &annot)
 	_mapp[key]._mapvalue  = value;
 	_mapp[key].annotation = annot;
 }
+string mapp::get_data(const string &table_name)
+{
+	string mapp_out = get_annot();
+	mapp_out += "[" + table_name + "]" + '\n';
+	for (auto &i : _mapp){
+		mapp_out += i.second.annotation;
+		mapp_out += i.first + "=" + i.second._mapvalue + '\n';
+	}
+	mapp_out += '\n';
+
+	return mapp_out;
+}
 void mapp::show_mapp(const string &table_name)
 {
-	cout<<get_annot();
-	cout<<"["<<table_name<<"]"<<endl;
-
-	for (auto &i : _mapp){
-		cout<<i.second.annotation;
-		cout<<i.first<<"="<<i.second._mapvalue<<endl;
-	}
-	cout<<endl;
+	cout<<get_data(table_name);
 }
 
 string &mapp::index(const string &key)
+{
+	return _mapp[key]._mapvalue;
+}
+string &mapp::operator[](const string &key)
 {
 	return _mapp[key]._mapvalue;
 }
@@ -239,37 +266,64 @@ const bool arrayy::is_arrayy(void)
 {
 	return true;
 }
-void arrayy::append(vector<string> &data, string &annot)
+void arrayy::append(vector<string> &data, const string &annot)
 {
 	arrayvalue value;
 	value.annotation  = annot;
 	value._arrayvalue = data;
 	_arrayy.push_back(value);
 }
+string arrayy::get_data(const string &table_name)
+{
+	string arrayy_out = get_annot();
+	arrayy_out += "[" + table_name + "]" + '\n';
+
+	for (auto &i : _arrayy){
+		arrayy_out += i.annotation;
+		for (auto &j : i._arrayvalue){
+			arrayy_out += j;
+			arrayy_out += '|';
+		}
+		arrayy_out.pop_back();
+		arrayy_out += '\n';
+	}
+	arrayy_out += '\n';
+
+	return arrayy_out;
+}
 void arrayy::show_arrayy(const string &table_name)
 {
-	cout<<get_annot();
-	cout<<"["<<table_name<<"]"<<endl;
-	for (auto &i : _arrayy){
-		cout<<i.annotation;
-		string data;
-		for (auto &j : i._arrayvalue){
-			data+=j;
-			data+='|';
-		}
-		data.pop_back();
-		cout<<data<<endl;
-	}
-	cout<<endl;
+	cout<<get_data(table_name);
 }
-vector<string> &arrayy::index(size_t num)
+vector<string> &arrayy::index(size_t pos)
 {
-	return _arrayy[num]._arrayvalue;
+	return _arrayy[pos]._arrayvalue;
 }
+vector<string> &arrayy::operator[](size_t pos)
+{
+	return _arrayy[pos]._arrayvalue;
+}
+void arrayy::erase(vector<arrayvalue>::iterator pos)
+{
+	_arrayy.erase(pos);
+}
+vector<arrayvalue>::iterator arrayy::begin(void)
+{
+	return _arrayy.begin();
+}
+vector<arrayvalue>::iterator arrayy::end(void)
+{
+	return _arrayy.end();
+}
+
 /*************table**************/
 const bool table::is_table(void)
 {
 	return true;
+}
+void table::clear(void)
+{
+	_table.clear();
 }
 shared_ptr<base> &table::operator[](const string &key)
 {
@@ -291,17 +345,29 @@ map<string, shared_ptr<base>>::iterator table::begin(void)
 {
 	return _table.begin();
 }
+string table::get_data(void)
+{
+	string table_out = get_annot();
+	table_out += '\n';
+	for (auto &i : _table){
+		table_out += i.second->get_data(i.first);
+	}
+	return table_out;
+}
 
 void table::show_table(void)
 {
-	cout<<get_annot()<<endl;;
-	for (auto &i : _table){
-		if (i.second->is_mapp()){
-			i.second->as_mapp()->show_mapp(i.first);
-		}
-		if (i.second->is_arrayy()){
-			i.second->as_arrayy()->show_arrayy(i.first);
-		}
-	}
+	string out = get_data();
+	cout<<out<<endl;
 }
-
+void table::write(const char *filename)
+{
+	string out = get_data();
+	ofstream ofs(filename, ofstream::out|ofstream::trunc);
+	if (!ofs.is_open()){
+		cerr<<"open file error"<<endl;
+		//throw 
+	}
+	ofs.write(out.c_str(), out.size());
+	ofs.close();
+}

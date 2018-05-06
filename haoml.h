@@ -23,6 +23,7 @@ public:
 	parser& operator=(const parser &pa) = delete;
 	shared_ptr<table> build(const char *filename);
 protected:
+	shared_ptr<base> make_base(void);
 	shared_ptr<table> make_table(void);
 	shared_ptr<mapp> make_mapp(void);
 	shared_ptr<arrayy> make_arrayy(void);
@@ -40,6 +41,7 @@ public:
 	virtual const bool is_table(void);
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
+	virtual string get_data(const string &table_name);
 	
 	void set_annot(string &annot);
 	string &get_annot(void);
@@ -59,10 +61,12 @@ struct mapvalue{
 class mapp  : public base{
 public:
 	virtual const bool is_mapp(void) override;
+	virtual string get_data(const string &table_name);
 	void insert(string &key, string &value, string &annot);
 	void show_mapp(const string &table_name);
 
 	string &index(const string &key);
+	string &operator[](const string &key);
 private:
 	map<string, mapvalue> _mapp;
 };//end of mapp
@@ -70,14 +74,24 @@ private:
 struct arrayvalue{
 	string annotation;
 	vector<string> _arrayvalue;
+	string &operator[](size_t pos)
+	{
+		return _arrayvalue[pos];
+	}
 };//end of arrayvalue 
 
 class arrayy : public base{
 public:
 	virtual const bool is_arrayy(void) override;
-	void append(vector<string> &data, string &annot);
+	virtual string get_data(const string &table_name);
+	void append(vector<string> &data, const string &annot);
 	void show_arrayy(const string &table_name);
-	vector<string> &index(size_t num);
+	vector<string> &index(size_t pos);
+	vector<string> &operator[](size_t pos);
+	void erase(vector<arrayvalue>::iterator pos);
+	vector<arrayvalue>::iterator begin(void);
+	vector<arrayvalue>::iterator end(void);
+
 private:
 	vector<arrayvalue> _arrayy;
 };//end of array
@@ -87,12 +101,15 @@ public:
 	virtual const bool is_table(void) override;
 	bool empty(void);
 	void show_table(void);
+	void clear(void);
+	void write(const char *filename);
 	shared_ptr<base> &operator[](const string &key);
-
 	map<string, shared_ptr<base>>::iterator find(string &key);
 	map<string, shared_ptr<base>>::iterator end(void);
 	map<string, shared_ptr<base>>::iterator begin(void);
-
+protected:
+	virtual string get_data(void);
+private:
 	map<string, shared_ptr<base>> _table;
 };//end of table
 
