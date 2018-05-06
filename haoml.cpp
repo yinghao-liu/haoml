@@ -177,10 +177,6 @@ vector<string> parser::split(char delimit, const string &str)
 }
 
 /**************base****************/
-const bool base::is_table(void)
-{
-	return false;
-}
 const bool base::is_mapp(void)
 {
 	return false;
@@ -195,13 +191,6 @@ string base::get_data(const string &table_name)
 	base_out += "[" + table_name + "]" + '\n';
 	base_out += '\n';
 	return base_out;
-}
-shared_ptr<table> base::as_table(void)
-{
-	if (is_table()){
-		return static_pointer_cast<table>(shared_from_this());
-	}
-	return nullptr;
 }
 shared_ptr<mapp> base::as_mapp(void)
 {
@@ -236,6 +225,10 @@ void mapp::insert(string &key, string &value, string &annot)
 	_mapp[key]._mapvalue  = value;
 	_mapp[key].annotation = annot;
 }
+void mapp::erase(string key)
+{
+	_mapp.erase(key);
+}
 string mapp::get_data(const string &table_name)
 {
 	string mapp_out = get_annot();
@@ -266,13 +259,6 @@ const bool arrayy::is_arrayy(void)
 {
 	return true;
 }
-void arrayy::append(vector<string> &data, const string &annot)
-{
-	arrayvalue value;
-	value.annotation  = annot;
-	value._arrayvalue = data;
-	_arrayy.push_back(value);
-}
 string arrayy::get_data(const string &table_name)
 {
 	string arrayy_out = get_annot();
@@ -291,6 +277,17 @@ string arrayy::get_data(const string &table_name)
 
 	return arrayy_out;
 }
+void arrayy::append(vector<string> &data, const string &annot)
+{
+	arrayvalue value;
+	value.annotation  = annot;
+	value._arrayvalue = data;
+	_arrayy.push_back(value);
+}
+void arrayy::erase(vector<arrayvalue>::iterator pos)
+{
+	_arrayy.erase(pos);
+}
 void arrayy::show_arrayy(const string &table_name)
 {
 	cout<<get_data(table_name);
@@ -303,10 +300,6 @@ vector<string> &arrayy::operator[](size_t pos)
 {
 	return _arrayy[pos]._arrayvalue;
 }
-void arrayy::erase(vector<arrayvalue>::iterator pos)
-{
-	_arrayy.erase(pos);
-}
 vector<arrayvalue>::iterator arrayy::begin(void)
 {
 	return _arrayy.begin();
@@ -317,10 +310,6 @@ vector<arrayvalue>::iterator arrayy::end(void)
 }
 
 /*************table**************/
-const bool table::is_table(void)
-{
-	return true;
-}
 void table::clear(void)
 {
 	_table.clear();

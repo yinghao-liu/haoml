@@ -11,6 +11,7 @@ int main(void)
 	ptr->show_table();
 	cout<<"---------------------------"<<endl;
 	root["table_a"]->as_mapp()->index("a") = "1234a";
+	root["table_a"]->as_mapp()->erase("b");
 	auto &b = root["array_b"]->as_arrayy()->index(0)[1];
 	cout<<b<<endl;
 	b = "20";

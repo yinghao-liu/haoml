@@ -11,6 +11,6 @@
 #table name is table_a
 [table_a]
 a=1234a
-#table_a.b
+#b
 b=
 
