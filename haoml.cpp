@@ -301,9 +301,9 @@ void arrayy::append(vector<string> &data, const string &annot)
 	value._arrayvalue = data;
 	_arrayy.push_back(value);
 }
-void arrayy::erase(vector<arrayvalue>::iterator pos)
+vector<arrayvalue>::iterator arrayy::erase(vector<arrayvalue>::iterator pos)
 {
-	_arrayy.erase(pos);
+	return _arrayy.erase(pos);
 }
 void arrayy::show_arrayy(const string &table_name)
 {
@@ -354,7 +354,7 @@ map<string, shared_ptr<base>>::iterator table::begin(void)
 string table::get_data(void)
 {
 	string table_out = get_annot();
-	table_out += '\n';
+	table_out += table_out.empty()? "" : "\n";
 	for (auto &i : _table){
 		table_out += i.second->get_data(i.first);
 	}

@@ -5,8 +5,10 @@
 [123]
 
 [array_b]
-2|20|3
-2|2|3
+0|2|3
+0|1|2
+0|0|9
+1|1|1
 
 #table name is table_a
 [table_a]

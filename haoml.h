@@ -101,7 +101,7 @@ public:
 	virtual const bool is_arrayy(void) override;
 	virtual string get_data(const string &table_name);
 	void append(vector<string> &data, const string &annot);
-	void erase(vector<arrayvalue>::iterator pos);
+	vector<arrayvalue>::iterator erase(vector<arrayvalue>::iterator pos);
 
 	void show_arrayy(const string &table_name);
 	vector<string> &index(size_t pos);
