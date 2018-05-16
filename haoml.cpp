@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <iostream>
 #include <fstream>
 #include "haoml.h"
@@ -224,7 +225,7 @@ shared_ptr<arrayy> base::as_arrayy(void)
 	return nullptr;
 }
 
-void base::set_annot(string &annot)
+void base::set_annot(const string &annot)
 {
 	annotation = annot;
 }
@@ -236,15 +237,6 @@ string & base::get_annot(void)
 const bool mapp::is_mapp(void)
 {
 	return true;
-}
-void mapp::insert(string &key, string &value, string &annot)
-{
-	_mapp[key]._mapvalue  = value;
-	_mapp[key].annotation = annot;
-}
-void mapp::erase(string key)
-{
-	_mapp.erase(key);
 }
 string mapp::get_data(const string &table_name)
 {
@@ -258,16 +250,26 @@ string mapp::get_data(const string &table_name)
 
 	return mapp_out;
 }
+string &mapp::operator[](const string &key)
+{
+	return _mapp[key]._mapvalue;
+}
+
+void mapp::insert(string &key, string &value, string &annot)
+{
+	_mapp[key]._mapvalue  = value;
+	_mapp[key].annotation = annot;
+}
+void mapp::erase(string key)
+{
+	_mapp.erase(key);
+}
 void mapp::show_mapp(const string &table_name)
 {
 	cout<<get_data(table_name);
 }
 
 string &mapp::index(const string &key)
-{
-	return _mapp[key]._mapvalue;
-}
-string &mapp::operator[](const string &key)
 {
 	return _mapp[key]._mapvalue;
 }
@@ -294,6 +296,10 @@ string arrayy::get_data(const string &table_name)
 
 	return arrayy_out;
 }
+arrayvalue &arrayy::operator[](const size_t index)
+{
+	return _arrayy[index];	
+}
 void arrayy::append(vector<string> &data, const string &annot)
 {
 	arrayvalue value;
@@ -310,10 +316,6 @@ void arrayy::show_arrayy(const string &table_name)
 	cout<<get_data(table_name);
 }
 vector<string> &arrayy::index(size_t pos)
-{
-	return _arrayy[pos]._arrayvalue;
-}
-vector<string> &arrayy::operator[](size_t pos)
 {
 	return _arrayy[pos]._arrayvalue;
 }
@@ -376,4 +378,12 @@ void table::write(const char *filename)
 	}
 	ofs.write(out.c_str(), out.size());
 	ofs.close();
+}
+void table::set_annot(string &annot)
+{
+	annotation = annot;
+}
+string &table::get_annot(void)
+{
+	return annotation;
 }

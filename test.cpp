@@ -7,17 +7,27 @@ int main(void)
 	parser config; 
 	auto ptr = config.build("config.haoml");
 	auto &root = *ptr;
+	auto &stu = *root["students"];
+	auto &tea = *root["teacher"];
+	auto &res = *root["reserved"];
 
-	ptr->show_table();
+	cout<<stu[0][0]<<endl;
+	cout<<tea["wang"]<<endl;
+	if (stu.is_arrayy()){
+		cout<<"stu is arrayy"<<endl;
+	}
+
+
 	cout<<"---------------------------"<<endl;
-	root["table_a"]->as_mapp()->index("a") = "1234a";
-	root["table_a"]->as_mapp()->erase("b");
-	auto &b = root["array_b"]->as_arrayy()->index(0)[1];
-	
-	auto &arra = *root["array_b"]->as_arrayy();
+	root.show_table();
+	cout<<"---------------------------"<<endl;
+
+	/*
+	auto &arra = *root["students"].as_arrayy();
 	for(auto i=arra.begin(); i!=arra.end(); ){
 		i=arra.erase(i);
 	}
-	ptr->write("config.haoml");
+	*/
+	root.write("config.haoml");
 	return 0;
 }

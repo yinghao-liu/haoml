@@ -1,18 +1,17 @@
-#clear
-##help
-	#sdsdfsd
+#this is the declare of this file
 
-[123]
+[reserved]
 
-[array_b]
-0|2|3
-0|1|2
-0|0|9
-1|1|1
+#format is: name|age|score
+[students]
+frank|20|100
+evan|21|90
+jake|20|88
+lucy|19|95
 
-#table name is table_a
-[table_a]
-a=1234a
-#b
-b=
+#format is: name=age
+[teacher]
+#
+li=30
+wang=40
 

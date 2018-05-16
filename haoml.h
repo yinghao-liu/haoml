@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef _HAOML_H_
 #define _HAOML_H_
 
@@ -32,6 +33,7 @@ class base;
 class mapp;
 class arrayy;
 class table;
+struct arrayvalue;
 
 
 class parser{
@@ -58,8 +60,10 @@ public:
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
 	virtual string get_data(const string &table_name);
+	virtual string &operator[](const string &key){}
+	virtual arrayvalue &operator[](const size_t index){}
 	
-	void set_annot(string &annot);
+	void set_annot(const string &annot);
 	string &get_annot(void);
 	shared_ptr<mapp>  as_mapp(void);
 	shared_ptr<arrayy> as_arrayy(void);
@@ -77,12 +81,12 @@ class mapp  : public base{
 public:
 	virtual const bool is_mapp(void) override;
 	virtual string get_data(const string &table_name);
+	virtual string &operator[](const string &key);
 	void insert(string &key, string &value, string &annot);
 	void erase(string key);
 	void show_mapp(const string &table_name);
 
 	string &index(const string &key);
-	string &operator[](const string &key);
 private:
 	map<string, mapvalue> _mapp;
 };//end of mapp
@@ -100,12 +104,12 @@ class arrayy : public base{
 public:
 	virtual const bool is_arrayy(void) override;
 	virtual string get_data(const string &table_name);
+	virtual arrayvalue &operator[](const size_t index);
 	void append(vector<string> &data, const string &annot);
 	vector<arrayvalue>::iterator erase(vector<arrayvalue>::iterator pos);
 
 	void show_arrayy(const string &table_name);
 	vector<string> &index(size_t pos);
-	vector<string> &operator[](size_t pos);
 	vector<arrayvalue>::iterator begin(void);
 	vector<arrayvalue>::iterator end(void);
 
@@ -113,7 +117,7 @@ private:
 	vector<arrayvalue> _arrayy;
 };//end of array
 
-class table : public base{
+class table{
 public:
 	bool empty(void);
 	void show_table(void);
@@ -123,14 +127,14 @@ public:
 	map<string, shared_ptr<base>>::iterator find(string &key);
 	map<string, shared_ptr<base>>::iterator end(void);
 	map<string, shared_ptr<base>>::iterator begin(void);
+	void set_annot(string &annot);
+	string &get_annot(void);
 protected:
 	virtual string get_data(void);
 private:
 	map<string, shared_ptr<base>> _table;
+	string annotation;
 };//end of table
-
-
-
 
 
 
