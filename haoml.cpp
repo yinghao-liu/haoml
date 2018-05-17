@@ -23,24 +23,27 @@ using namespace std;
 using namespace haoml;
 using std::make_shared;
 
-/***********parser***************/
-shared_ptr<base> parser::make_base(void)
+namespace haoml{
+
+shared_ptr<base> make_base(void)
 {
 	return make_shared<base>();
 }
-shared_ptr<table> parser::make_table(void)
+shared_ptr<table> make_table(void)
 {
 	return make_shared<table>();
 }
-shared_ptr<mapp> parser::make_mapp(void)
+shared_ptr<mapp> make_mapp(void)
 {
 	return make_shared<mapp>();
 }
-shared_ptr<arrayy> parser::make_arrayy(void)
+shared_ptr<arrayy> make_arrayy(void)
 {
 	return make_shared<arrayy>();
 }
 
+}
+/***********parser***************/
 shared_ptr<table> parser::build(const char *filename)
 {
 	ifstream fs(filename);
@@ -67,10 +70,10 @@ shared_ptr<table> parser::build(const char *filename)
 				root->set_annot(annot);
 			}
 			if (!_table.empty()){
-				if (nullptr == (*root)[_table]){
-					(*root)[_table] = make_base();
+				if (root->is_null(_table)){
+					root->insert(_table, make_base());
 				}
-				(*root)[_table]->set_annot(tab_annot);
+				base_ptr->set_annot(tab_annot);
 				_table.clear();
 				tab_annot.clear();
 				base_ptr = nullptr;
@@ -87,8 +90,7 @@ shared_ptr<table> parser::build(const char *filename)
 
 		switch (line[start=line.find_first_not_of("\t ")]){
 		case '#':
-			line  += '\n';
-			annot += line;
+			annot += line + '\n';
 			break;
 		case '[':
 			end = line.rfind(']');
@@ -109,18 +111,21 @@ shared_ptr<table> parser::build(const char *filename)
 			annot.clear();
 			break;
 		default:
+			/*mixed type would return nullptr*/
 			if (nullptr == parser_data(line, annot, base_ptr)){
 				annot.clear();
 				continue;
 			}
 			annot.clear();
 
+			// data without a section([xxx]) ahead
 			if (_table.empty()){
 				base_ptr.reset();
 				continue;
 			}
-			if(nullptr==(*root)[_table]){
-				(*root)[_table] = base_ptr;
+			// if this line is the first one after a section
+			if(root->is_null(_table)){
+				root->insert(_table, base_ptr);
 			}
 		}
 	}
@@ -227,7 +232,11 @@ shared_ptr<arrayy> base::as_arrayy(void)
 
 void base::set_annot(const string &annot)
 {
-	annotation = annot;
+	if (annot.empty()){
+		return;
+	}
+	annotation = ('#'==annot.front())?annot:("#" + annot);
+	annotation += ('\n'==annot.back())?"":"\n";
 }
 string & base::get_annot(void)
 {
@@ -255,12 +264,12 @@ string &mapp::operator[](const string &key)
 	return _mapp[key]._mapvalue;
 }
 
-void mapp::insert(string &key, string &value, string &annot)
+void mapp::insert(const string &key, const string &value, const string &annot)
 {
 	_mapp[key]._mapvalue  = value;
 	_mapp[key].annotation = annot;
 }
-void mapp::erase(string key)
+void mapp::erase(const string &key)
 {
 	_mapp.erase(key);
 }
@@ -269,10 +278,10 @@ void mapp::show_mapp(const string &table_name)
 	cout<<get_data(table_name);
 }
 
-string &mapp::index(const string &key)
+/*string &mapp::index(const string &key)
 {
 	return _mapp[key]._mapvalue;
-}
+}*/
 /***********array*************/
 const bool arrayy::is_arrayy(void)
 {
@@ -315,10 +324,10 @@ void arrayy::show_arrayy(const string &table_name)
 {
 	cout<<get_data(table_name);
 }
-vector<string> &arrayy::index(size_t pos)
+/*vector<string> &arrayy::index(size_t pos)
 {
 	return _arrayy[pos]._arrayvalue;
-}
+}*/
 vector<arrayvalue>::iterator arrayy::begin(void)
 {
 	return _arrayy.begin();
@@ -333,9 +342,21 @@ void table::clear(void)
 {
 	_table.clear();
 }
-shared_ptr<base> &table::operator[](const string &key)
+void table::erase(const string &key)
 {
-	return _table[key];
+	_table.erase(key);
+}
+base &table::operator[](const string &key)
+{
+	return *_table[key];
+}
+bool table::is_null(const string &key)
+{
+	return ((nullptr == _table[key])?true:false);
+}
+void table::insert(const string &key, shared_ptr<base> ptr_base)
+{
+	_table[key]=ptr_base;
 }
 bool table::empty(void)
 {
@@ -365,8 +386,7 @@ string table::get_data(void)
 
 void table::show_table(void)
 {
-	string out = get_data();
-	cout<<out<<endl;
+	cout<<get_data();
 }
 void table::write(const char *filename)
 {
@@ -379,9 +399,14 @@ void table::write(const char *filename)
 	ofs.write(out.c_str(), out.size());
 	ofs.close();
 }
-void table::set_annot(string &annot)
+void table::set_annot(const string &annot)
 {
-	annotation = annot;
+	if (annot.empty()){
+		return;
+	}
+	annotation = ('#'==annot.front())?annot:("#" + annot);
+	annotation += ('\n'==annot.back())?"":"\n";
+
 }
 string &table::get_annot(void)
 {

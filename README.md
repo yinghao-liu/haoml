@@ -1,11 +1,11 @@
 # haoml
-haoml is short for "hao markup language"
+haoml stands for hao markup language
 
 ## what is haoml
 haoml is a kind of markup language like [toml](https://github.com/skystrife/cpptoml), but more easier.  
 
 ## example
-```conf
+```
 #this is the declare of this file
 
 #format is: name|age|score
@@ -17,7 +17,7 @@ lucy|19|95
 
 #format is: name=age
 [teacher]
-#teacher li and he is 30 years old
+#teacher li is 30 years old
 li = 30
 #wang
  wang=40
@@ -26,7 +26,7 @@ li = 30
 ```
 
 ## elements
-a haoml file is consist of several blocks which are delimited by a new line('\n'), echo block 
+a haoml file is consist of several blocks which are delimited by a new line('\n'), each block 
 is one of the three types described below. 
 
 ### comment

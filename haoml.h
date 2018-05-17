@@ -36,16 +36,17 @@ class table;
 struct arrayvalue;
 
 
+extern shared_ptr<base> make_base(void);
+extern shared_ptr<table> make_table(void);
+extern shared_ptr<mapp> make_mapp(void);
+extern shared_ptr<arrayy> make_arrayy(void);
+
 class parser{
 public:
 	parser(void){};
 	parser& operator=(const parser &pa) = delete;
 	shared_ptr<table> build(const char *filename);
 protected:
-	shared_ptr<base> make_base(void);
-	shared_ptr<table> make_table(void);
-	shared_ptr<mapp> make_mapp(void);
-	shared_ptr<arrayy> make_arrayy(void);
 	shared_ptr<base> parser_data(string &data, string &annot, shared_ptr<base> &base_ptr);
 
 	string strip(string &str);
@@ -53,7 +54,13 @@ protected:
 private:
 };//end class value
 
-
+class comment{
+public:
+	void set_annot(const string &annot);
+	string &get_annot(void);
+private:
+	string annotation;
+};
 
 class base : public std::enable_shared_from_this<base>{
 public:
@@ -82,11 +89,11 @@ public:
 	virtual const bool is_mapp(void) override;
 	virtual string get_data(const string &table_name);
 	virtual string &operator[](const string &key);
-	void insert(string &key, string &value, string &annot);
-	void erase(string key);
+	void insert(const string &key, const string &value, const string &annot="");
+	void erase(const string &key);
 	void show_mapp(const string &table_name);
 
-	string &index(const string &key);
+	//string &index(const string &key);
 private:
 	map<string, mapvalue> _mapp;
 };//end of mapp
@@ -94,7 +101,11 @@ private:
 struct arrayvalue{
 	string annotation;
 	vector<string> _arrayvalue;
-	string &operator[](size_t pos)
+	string &operator[](const size_t pos)
+	{
+		return _arrayvalue[pos];
+	}
+	string &index(const size_t pos)
 	{
 		return _arrayvalue[pos];
 	}
@@ -105,11 +116,11 @@ public:
 	virtual const bool is_arrayy(void) override;
 	virtual string get_data(const string &table_name);
 	virtual arrayvalue &operator[](const size_t index);
-	void append(vector<string> &data, const string &annot);
+	void append(vector<string> &data, const string &annot="");
 	vector<arrayvalue>::iterator erase(vector<arrayvalue>::iterator pos);
 
 	void show_arrayy(const string &table_name);
-	vector<string> &index(size_t pos);
+	//vector<string> &index(size_t pos);
 	vector<arrayvalue>::iterator begin(void);
 	vector<arrayvalue>::iterator end(void);
 
@@ -121,13 +132,16 @@ class table{
 public:
 	bool empty(void);
 	void show_table(void);
+	void erase(const string &key);
 	void clear(void);
 	void write(const char *filename);
-	shared_ptr<base> &operator[](const string &key);
+	base &operator[](const string &key);
+	bool is_null(const string &key);
+	void insert(const string &key, shared_ptr<base> ptr_base);
 	map<string, shared_ptr<base>>::iterator find(string &key);
 	map<string, shared_ptr<base>>::iterator end(void);
 	map<string, shared_ptr<base>>::iterator begin(void);
-	void set_annot(string &annot);
+	void set_annot(const string &annot);
 	string &get_annot(void);
 protected:
 	virtual string get_data(void);

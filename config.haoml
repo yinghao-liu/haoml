@@ -1,7 +1,5 @@
 #this is the declare of this file
 
-[reserved]
-
 #format is: name|age|score
 [students]
 frank|20|100
@@ -11,7 +9,9 @@ lucy|19|95
 
 #format is: name=age
 [teacher]
-#
-li=30
-wang=40
+#teacher li is 30 years old
+li = 30
+#wang
+ wang=40
 
+[reserved]
