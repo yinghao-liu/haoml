@@ -48,10 +48,8 @@ public:
 	shared_ptr<table> build(const char *filename);
 protected:
 	shared_ptr<base> parser_data(string &data, string &annot, shared_ptr<base> &base_ptr);
-
 	string strip(string &str);
 	vector<string> split(char delimit, const string &str);
-private:
 };//end class value
 
 class comment{
@@ -62,24 +60,19 @@ private:
 	string annotation;
 };
 
-class base : public std::enable_shared_from_this<base>{
+class base : public comment, public std::enable_shared_from_this<base>{
 public:
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
 	virtual string get_data(const string &table_name);
 	virtual string &operator[](const string &key){}
-	virtual arrayvalue &operator[](const size_t index){}
+	virtual arrayvalue &operator[](const size_t pos){}
 	
-	void set_annot(const string &annot);
-	string &get_annot(void);
 	shared_ptr<mapp>  as_mapp(void);
 	shared_ptr<arrayy> as_arrayy(void);
-private:
-	string annotation;
 };//end of base
 
-struct mapvalue{
-	string annotation;
+struct mapvalue : public comment{
 	string _mapvalue;
 };//end of mapvalue 
 
@@ -89,17 +82,16 @@ public:
 	virtual const bool is_mapp(void) override;
 	virtual string get_data(const string &table_name);
 	virtual string &operator[](const string &key);
+
 	void insert(const string &key, const string &value, const string &annot="");
 	void erase(const string &key);
 	void show_mapp(const string &table_name);
 
-	//string &index(const string &key);
 private:
 	map<string, mapvalue> _mapp;
 };//end of mapp
 
-struct arrayvalue{
-	string annotation;
+struct arrayvalue : public comment{
 	vector<string> _arrayvalue;
 	string &operator[](const size_t pos)
 	{
@@ -115,20 +107,19 @@ class arrayy : public base{
 public:
 	virtual const bool is_arrayy(void) override;
 	virtual string get_data(const string &table_name);
-	virtual arrayvalue &operator[](const size_t index);
+	virtual arrayvalue &operator[](const size_t pos);
+
 	void append(vector<string> &data, const string &annot="");
 	vector<arrayvalue>::iterator erase(vector<arrayvalue>::iterator pos);
 
 	void show_arrayy(const string &table_name);
-	//vector<string> &index(size_t pos);
 	vector<arrayvalue>::iterator begin(void);
 	vector<arrayvalue>::iterator end(void);
-
 private:
 	vector<arrayvalue> _arrayy;
 };//end of array
 
-class table{
+class table : public comment{
 public:
 	bool empty(void);
 	void show_table(void);
@@ -141,13 +132,10 @@ public:
 	map<string, shared_ptr<base>>::iterator find(string &key);
 	map<string, shared_ptr<base>>::iterator end(void);
 	map<string, shared_ptr<base>>::iterator begin(void);
-	void set_annot(const string &annot);
-	string &get_annot(void);
 protected:
 	virtual string get_data(void);
 private:
 	map<string, shared_ptr<base>> _table;
-	string annotation;
 };//end of table
 
 

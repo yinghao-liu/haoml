@@ -198,7 +198,19 @@ vector<string> parser::split(char delimit, const string &str)
 	result.push_back(sub);
 	return result;
 }
-
+/**************comment***************/
+void comment::set_annot(const string &annot)
+{
+	if (annot.empty()){
+		return;
+	}
+	annotation = ('#'==annot.front())?annot:("#" + annot);
+	annotation += ('\n'==annot.back())?"":"\n";
+}
+string &comment::get_annot(void)
+{
+	return annotation;
+}
 /**************base****************/
 const bool base::is_mapp(void)
 {
@@ -230,18 +242,6 @@ shared_ptr<arrayy> base::as_arrayy(void)
 	return nullptr;
 }
 
-void base::set_annot(const string &annot)
-{
-	if (annot.empty()){
-		return;
-	}
-	annotation = ('#'==annot.front())?annot:("#" + annot);
-	annotation += ('\n'==annot.back())?"":"\n";
-}
-string & base::get_annot(void)
-{
-	return annotation;
-}
 /**************mapp***************/
 const bool mapp::is_mapp(void)
 {
@@ -252,7 +252,7 @@ string mapp::get_data(const string &table_name)
 	string mapp_out = get_annot();
 	mapp_out += "[" + table_name + "]" + '\n';
 	for (auto &i : _mapp){
-		mapp_out += i.second.annotation;
+		mapp_out += i.second.get_annot();
 		mapp_out += i.first + "=" + i.second._mapvalue + '\n';
 	}
 	mapp_out += '\n';
@@ -267,7 +267,7 @@ string &mapp::operator[](const string &key)
 void mapp::insert(const string &key, const string &value, const string &annot)
 {
 	_mapp[key]._mapvalue  = value;
-	_mapp[key].annotation = annot;
+	_mapp[key].set_annot(annot);
 }
 void mapp::erase(const string &key)
 {
@@ -278,10 +278,6 @@ void mapp::show_mapp(const string &table_name)
 	cout<<get_data(table_name);
 }
 
-/*string &mapp::index(const string &key)
-{
-	return _mapp[key]._mapvalue;
-}*/
 /***********array*************/
 const bool arrayy::is_arrayy(void)
 {
@@ -293,7 +289,7 @@ string arrayy::get_data(const string &table_name)
 	arrayy_out += "[" + table_name + "]" + '\n';
 
 	for (auto &i : _arrayy){
-		arrayy_out += i.annotation;
+		arrayy_out += i.get_annot();
 		for (auto &j : i._arrayvalue){
 			arrayy_out += j;
 			arrayy_out += '|';
@@ -305,14 +301,14 @@ string arrayy::get_data(const string &table_name)
 
 	return arrayy_out;
 }
-arrayvalue &arrayy::operator[](const size_t index)
+arrayvalue &arrayy::operator[](const size_t pos)
 {
-	return _arrayy[index];	
+	return _arrayy[pos];	
 }
 void arrayy::append(vector<string> &data, const string &annot)
 {
 	arrayvalue value;
-	value.annotation  = annot;
+	value.set_annot(annot);
 	value._arrayvalue = data;
 	_arrayy.push_back(value);
 }
@@ -324,10 +320,6 @@ void arrayy::show_arrayy(const string &table_name)
 {
 	cout<<get_data(table_name);
 }
-/*vector<string> &arrayy::index(size_t pos)
-{
-	return _arrayy[pos]._arrayvalue;
-}*/
 vector<arrayvalue>::iterator arrayy::begin(void)
 {
 	return _arrayy.begin();
@@ -399,16 +391,4 @@ void table::write(const char *filename)
 	ofs.write(out.c_str(), out.size());
 	ofs.close();
 }
-void table::set_annot(const string &annot)
-{
-	if (annot.empty()){
-		return;
-	}
-	annotation = ('#'==annot.front())?annot:("#" + annot);
-	annotation += ('\n'==annot.back())?"":"\n";
 
-}
-string &table::get_annot(void)
-{
-	return annotation;
-}
