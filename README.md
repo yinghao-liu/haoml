@@ -1,10 +1,15 @@
 # haoml
 haoml stands for hao markup language
 
-## what is haoml
+## What is haoml
 haoml is a kind of markup language like [toml](https://github.com/skystrife/cpptoml), but more easier.  
 
-## example
+## Feature
+* all value type are string
+* write back support
+
+
+## Example
 ```
 #this is the declare of this file
 
@@ -25,7 +30,7 @@ li = 30
 [reserved]
 ```
 
-## elements
+## Elements
 a haoml file is consist of several blocks which are delimited by a new line('\n'), each block 
 is one of the three types described below. 
 
@@ -38,6 +43,14 @@ a key-value pair
 ### arrayy
 strings delimited by '|'
 
+## How to use this lib
+just copy `haoml.cpp` and `haoml.h` to your project, include `haoml.h` in your source code, and add
+target in your `Makefile` or any other files that can compile.
 
+there are some examples in [test.cpp](test.cpp)
 
+## Documentation
+haoml documentation is generated using [Doxygen](http://www.doxygen.org).
 
+## License
+See the [LICENSE](LICENSE) file for details.
