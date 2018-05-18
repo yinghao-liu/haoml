@@ -6,8 +6,7 @@ haoml is a kind of markup language like [toml](https://github.com/skystrife/cppt
 
 ## Feature
 * all value type are string
-* write back support
-
+* parser and generator
 
 ## Example
 ```
