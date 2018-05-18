@@ -1,5 +1,5 @@
 # haoml
-[![Build Status](https://www.travis-ci.org/yinghao-liu/haoml.svg?branch=master)](https://www.travis-ci.org/yinghao-liu/haoml)
+[![Build Status](https://www.travis-ci.org/yinghao-liu/haoml.svg?branch=master)](https://www.travis-ci.org/yinghao-liu/haoml)  
 haoml stands for hao markup language
 
 ## What is haoml
