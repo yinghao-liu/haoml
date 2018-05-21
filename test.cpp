@@ -1,5 +1,5 @@
 #include <iostream>
-#include "haoml.h"
+#include "haoml/haoml.h"
 using namespace std;
 using namespace haoml;
 
