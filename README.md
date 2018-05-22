@@ -41,16 +41,16 @@ only full-line comment is supported
 a key-value pair 
 
 ### arrayy
-strings delimited by '|'
+strings delimited by '|'. if there is only one string, '|' can be omitted
 
 ## How to use this lib
 just copy `haoml.cpp` and `haoml.h` to your project, include `haoml.h` in your source code, and add
 target in your `Makefile` or any other files that can compile.
 
-there are some examples in [test.cpp](test.cpp)
+here are some examples in [test.cpp](test.cpp)
 
 ## Documentation
-haoml documentation is generated using [Doxygen](http://www.doxygen.org).
+[haoml documentation](https://yinghao-liu.github.io/haoml/) is generated using [Doxygen](http://www.doxygen.org).
 
 ## License
 See the [LICENSE](LICENSE) file for details.
