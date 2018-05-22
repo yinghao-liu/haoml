@@ -23,6 +23,7 @@ using namespace std;
 using namespace haoml;
 using std::make_shared;
 
+///namespace haoml
 namespace haoml{
 
 shared_ptr<base> make_base(void)
@@ -44,6 +45,12 @@ shared_ptr<arrayy> make_arrayy(void)
 
 }
 /***********parser***************/
+/**
+parser and construct
+@param filename the filename which should be parsed
+@return a shared pointer of table
+@see class table
+*/
 shared_ptr<table> parser::build(const char *filename)
 {
 	ifstream fs(filename);
@@ -170,6 +177,7 @@ shared_ptr<base> parser::parser_data(string &data, string &annot, shared_ptr<bas
 	array_ptr->append(vect_data, annot);
 	return base_ptr;	
 }
+///strip the space(' ') and tab('\t') of a string
 string parser::strip(string &str)
 {
 	size_t first;
@@ -181,7 +189,12 @@ string parser::strip(string &str)
 	}
 	return str.substr(0, 0);
 }
-
+/**
+	split a string which delimited by a specified delimiter
+	@param  delimit : delimiter
+	@param  str : raw string
+	@return a vector after split
+*/
 vector<string> parser::split(char delimit, const string &str)
 {
 	size_t start=0;
@@ -330,6 +343,7 @@ vector<arrayvalue>::iterator arrayy::end(void)
 }
 
 /*************table**************/
+///erase all elements
 void table::clear(void)
 {
 	_table.clear();
@@ -380,6 +394,11 @@ void table::show_table(void)
 {
 	cout<<get_data();
 }
+/**
+	write the whole table to a file, the file would be truncated first
+	@param filename : the file name
+	@return none
+*/
 void table::write(const char *filename)
 {
 	string out = get_data();
