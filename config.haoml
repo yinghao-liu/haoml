@@ -1,14 +1,14 @@
 #this is the declare of this file
 
 #format is: name|age|score
-[students]
+[teacher]
 frank|20|100
 evan|21|90
 jake|20|88
 lucy|19|95
 
 #format is: name=age
-[teacher]
+[students]
 #teacher li is 30 years old
 li = 30
 #wang

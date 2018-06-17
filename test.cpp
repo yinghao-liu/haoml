@@ -79,10 +79,10 @@ int main(void)
 {
 	cout<<"-------------access_and_data_modify--------------"<<endl;
 	access_and_data_modify();
-	cout<<"------------access_and_structure_modify---------------"<<endl;
-	access_and_structure_modify();
-	cout<<"------------generator---------------"<<endl;
-	generator();
+	//cout<<"------------access_and_structure_modify---------------"<<endl;
+	//access_and_structure_modify();
+	//cout<<"------------generator---------------"<<endl;
+	//generator();
 	
 	return 0;
 }
