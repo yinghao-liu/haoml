@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string.h>
 #include "haoml.h"
 using namespace std;
 using namespace haoml;
@@ -55,8 +56,7 @@ shared_ptr<table> parser::build(const char *filename)
 {
 	ifstream fs(filename);
 	if (!fs.is_open()){
-		cerr<<"open file error"<<endl;
-		//throw 
+		throw haoexception((string)"open file error, " + filename + ": " + strerror(errno));
 	}
 	shared_ptr<table> root = make_table();
 	shared_ptr<base> base_ptr;
@@ -102,17 +102,14 @@ shared_ptr<table> parser::build(const char *filename)
 		case '[':
 			end = line.rfind(']');
 			if (string::npos == end){
-				cerr<<"format error: "<<line<<endl;
-				//throw
+				throw haoexception((string)"format error: " + line);
 			}
 			if (!_table.empty()){
-				cerr<<"sorry! table can not be nested, current table is: "<<_table<<endl;
-				//throw
+				throw haoexception((string)"sorry! table can not be nested, current table is: " + _table);
 			}
 			_table = line.substr(start+1, end-start-1);
 			if (root->find(_table) != root->end()){//exsit
-				cerr<<"table is repeat : "<<_table<<endl;
-				//throw
+				throw haoexception((string)"table is repeat : " + _table);
 			}
 			tab_annot = annot;
 			annot.clear();
@@ -406,6 +403,7 @@ void table::write(const char *filename)
 	if (!ofs.is_open()){
 		cerr<<"open file error"<<endl;
 		//throw 
+		throw haoexception((string)"open file error," + filename + ": " + strerror(errno));
 	}
 	ofs.write(out.c_str(), out.size());
 	ofs.close();

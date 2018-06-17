@@ -23,6 +23,9 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include <stdexcept>
+
+using std::exception;
 using std::string;
 using std::map;
 using std::vector;
@@ -40,6 +43,14 @@ extern shared_ptr<base> make_base(void);
 extern shared_ptr<table> make_table(void);
 extern shared_ptr<mapp> make_mapp(void);
 extern shared_ptr<arrayy> make_arrayy(void);
+
+class haoexception : public exception{
+	public:
+		haoexception(const string &err) : message(err){}
+		virtual const char* what() const noexcept{return message.c_str();}
+	private:
+		string message;
+};
 
 class parser{
 public:
@@ -65,8 +76,8 @@ public:
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
 	virtual string get_data(const string &table_name);
-	virtual string &operator[](const string &key){}
-	virtual arrayvalue &operator[](const size_t pos){}
+	virtual string &operator[](const string &key){throw haoexception((string)"no data can be accessed by ["+key+"]");}
+	virtual arrayvalue &operator[](const size_t pos){throw haoexception("no data can be accessed by ["+std::to_string(pos)+"]");}
 	
 	shared_ptr<mapp>  as_mapp(void);
 	shared_ptr<arrayy> as_arrayy(void);
@@ -137,7 +148,6 @@ protected:
 private:
 	map<string, shared_ptr<base>> _table;
 };//end of table
-
 
 
 }//end namespace haoml
