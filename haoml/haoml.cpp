@@ -78,7 +78,7 @@ shared_ptr<table> parser::build(const char *filename)
 			}
 			if (!_table.empty()){
 				if (root->is_null(_table)){
-					root->insert(_table, make_base());
+					root->insert(_table, make_arrayy());
 				}
 				base_ptr->set_annot(tab_annot);
 				_table.clear();
@@ -283,6 +283,10 @@ void mapp::erase(const string &key)
 {
 	_mapp.erase(key);
 }
+bool mapp::empty(void)
+{
+	return _mapp.empty();
+}
 void mapp::show_mapp(const string &table_name)
 {
 	cout<<get_data(table_name);
@@ -329,6 +333,10 @@ vector<arrayvalue>::iterator arrayy::erase(vector<arrayvalue>::iterator pos)
 void arrayy::show_arrayy(const string &table_name)
 {
 	cout<<get_data(table_name);
+}
+bool arrayy::empty(void)
+{
+	return _arrayy.empty();
 }
 vector<arrayvalue>::iterator arrayy::begin(void)
 {

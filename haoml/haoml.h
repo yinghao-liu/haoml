@@ -1,14 +1,14 @@
 /*
  * Copyright (C) 2018 francis_hao <francis_hao@126.com>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or 
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but 
+ * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -78,24 +78,25 @@ public:
 	virtual string get_data(const string &table_name);
 	virtual string &operator[](const string &key){throw haoexception((string)"no data can be accessed by ["+key+"]");}
 	virtual arrayvalue &operator[](const size_t pos){throw haoexception("no data can be accessed by ["+std::to_string(pos)+"]");}
-	
+
 	shared_ptr<mapp>  as_mapp(void);
 	shared_ptr<arrayy> as_arrayy(void);
 };//end of base
 
 struct mapvalue : public comment{
 	string _mapvalue;
-};//end of mapvalue 
+};//end of mapvalue
 
 
 class mapp  : public base{
 public:
 	virtual const bool is_mapp(void) override;
-	virtual string get_data(const string &table_name);
-	virtual string &operator[](const string &key);
+	virtual string get_data(const string &table_name) override;
+	virtual string &operator[](const string &key) override;
 
 	void insert(const string &key, const string &value, const string &annot="");
 	void erase(const string &key);
+	bool empty(void);
 	void show_mapp(const string &table_name);
 
 private:
@@ -112,18 +113,19 @@ struct arrayvalue : public comment{
 	{
 		return _arrayvalue[pos];
 	}
-};//end of arrayvalue 
+};//end of arrayvalue
 
 class arrayy : public base{
 public:
 	virtual const bool is_arrayy(void) override;
-	virtual string get_data(const string &table_name);
-	virtual arrayvalue &operator[](const size_t pos);
+	virtual string get_data(const string &table_name) override;
+	virtual arrayvalue &operator[](const size_t pos) override;
 
 	void append(vector<string> &data, const string &annot="");
 	vector<arrayvalue>::iterator erase(vector<arrayvalue>::iterator pos);
 
 	void show_arrayy(const string &table_name);
+	bool empty(void);
 	vector<arrayvalue>::iterator begin(void);
 	vector<arrayvalue>::iterator end(void);
 private:

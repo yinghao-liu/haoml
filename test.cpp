@@ -8,15 +8,23 @@ void access_and_data_modify(void)
 	parser config; 
 	auto ptr = config.build("config.haoml");
 	auto &root = *ptr;
-
+	auto teacher_array=(&root["teacher"])->as_arrayy();
+	auto reserve_array=(&root["reserved"])->as_arrayy();
+	auto reserve_array2=root["reserved"];
 	/*access*/
-	cout<<root["students"][0][0]<<endl;
-	cout<<root["teacher"]["wang"]<<endl;
+	cout<<root["students"]["wang"]<<endl;
+	cout<<root["teacher"][0][0]<<endl;
 	/*data modify*/
-	root["students"][0][0] = "francis"; 
-	root["teacher"]["wang"]= "80";
+	//root["students"][0] = "francis"; 
+	//root["teacher"]["wang"]= "80";
     /*show whole table*/	
 	cout<<"-----whole file-----"<<endl;
+	if (teacher_array->empty()){
+		cout<<"teacher_array is empty"<<endl;
+	}
+	if (reserve_array->empty()){
+		cout<<"reserve_array is empty"<<endl;
+	}
 	root.show_table();
 }
 
