@@ -49,7 +49,10 @@ shared_ptr<arrayy> make_arrayy(void)
 /**
 parser and construct
 @param filename the filename which should be parsed
-@return a shared pointer of table
+@return a shared pointer of table, 
+		inside, if object is mapp, it will return shared_ptr<mapp> when use as_mapp()
+				if object is arrayy, it will return shared_ptr<arrayy> when use as_arrayy()
+				if object is null, it will return nullptr either use as_mapp() or as_arrayy()
 @see class table
 */
 shared_ptr<table> parser::build(const char *filename)
@@ -78,7 +81,7 @@ shared_ptr<table> parser::build(const char *filename)
 			}
 			if (!_table.empty()){
 				if (root->is_null(_table)){
-					root->insert(_table, make_arrayy());
+					root->insert(_table, make_base());
 				}
 				base_ptr->set_annot(tab_annot);
 				_table.clear();
@@ -237,6 +240,9 @@ string base::get_data(const string &table_name)
 	base_out += '\n';
 	return base_out;
 }
+/**
+ * @retrun shared_ptr<mapp> if is_mapp() is true, or nullptr else 
+ */
 shared_ptr<mapp> base::as_mapp(void)
 {
 	if (is_mapp()){
@@ -244,6 +250,9 @@ shared_ptr<mapp> base::as_mapp(void)
 	}
 	return nullptr;
 }
+/**
+ * @retrun shared_ptr<arrayy> if is_arrayy() is true, or nullptr else 
+ */
 shared_ptr<arrayy> base::as_arrayy(void)
 {
 	if (is_arrayy()){
@@ -360,6 +369,10 @@ void table::erase(const string &key)
 base &table::operator[](const string &key)
 {
 	return *_table[key];
+}
+shared_ptr<base> table::index(const string &key)
+{
+	return _table[key];
 }
 bool table::is_null(const string &key)
 {

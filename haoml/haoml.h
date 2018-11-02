@@ -140,6 +140,7 @@ public:
 	void clear(void);
 	void write(const char *filename);
 	base &operator[](const string &key);
+	shared_ptr<base> index(const string &key);
 	bool is_null(const string &key);
 	void insert(const string &key, shared_ptr<base> ptr_base);
 	map<string, shared_ptr<base>>::iterator find(string &key);

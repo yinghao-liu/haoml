@@ -8,9 +8,8 @@ void access_and_data_modify(void)
 	parser config; 
 	auto ptr = config.build("config.haoml");
 	auto &root = *ptr;
-	auto teacher_array=(&root["teacher"])->as_arrayy();
-	auto reserve_array=(&root["reserved"])->as_arrayy();
-	auto reserve_array2=root["reserved"];
+	auto teacher_array=root.index("teacher")->as_arrayy();
+	auto reserve_array=root.index("reserved")->as_mapp();
 	/*access*/
 	cout<<root["students"]["wang"]<<endl;
 	cout<<root["teacher"][0][0]<<endl;
