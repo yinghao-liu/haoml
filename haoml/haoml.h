@@ -31,6 +31,16 @@ using std::map;
 using std::vector;
 using std::shared_ptr;
 namespace haoml{
+/**
+ * file_error = 0 : file relevant exception code\n
+ * format_error : format relevant exception code\n
+ * access_error : operate [] access error of base
+ */
+enum class haoml_error_code:uint8_t{
+	file_error=0,
+	format_error,
+	access_error
+};
 
 class base;
 class mapp;
@@ -46,9 +56,11 @@ extern shared_ptr<arrayy> make_arrayy(void);
 
 class haoexception : public exception{
 	public:
-		haoexception(const string &err) : message(err){}
-		virtual const char* what() const noexcept{return message.c_str();}
+		haoexception(const haoml_error_code &ecc, const string &err) : ec(ecc),message(err){}
+		virtual const char* what(void) const noexcept{return message.c_str();}
+		const haoml_error_code code(void) const noexcept{return ec;}
 	private:
+		haoml_error_code ec;
 		string message;
 };
 
@@ -76,8 +88,8 @@ public:
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
 	virtual string get_data(const string &table_name);
-	virtual string &operator[](const string &key){throw haoexception((string)"no data can be accessed by ["+key+"]");}
-	virtual arrayvalue &operator[](const size_t pos){throw haoexception("no data can be accessed by ["+std::to_string(pos)+"]");}
+	virtual string &operator[](const string &key){throw haoexception(haoml_error_code::access_error, (string)"no data can be accessed by ["+key+"]");}
+	virtual arrayvalue &operator[](const size_t pos){throw haoexception(haoml_error_code::access_error, "no data can be accessed by ["+std::to_string(pos)+"]");}
 
 	shared_ptr<mapp>  as_mapp(void);
 	shared_ptr<arrayy> as_arrayy(void);

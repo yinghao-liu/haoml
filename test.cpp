@@ -6,24 +6,33 @@ using namespace haoml;
 void access_and_data_modify(void)
 {
 	parser config; 
-	auto ptr = config.build("config.haoml");
+	shared_ptr<table> ptr;
+	try{
+		ptr = config.build("config1.haoml");
+	}catch (haoexception  e){
+		if (haoml_error_code::file_error == e.code()){
+			cout<<e.what()<<endl;	
+			return;
+		}	
+	}
 	auto &root = *ptr;
-	auto teacher_array=root.index("teacher")->as_arrayy();
-	auto reserve_array=root.index("reserved")->as_mapp();
+	//auto teacher_array=root.index("teacher")->as_arrayy();
+	//auto reserve_array=root.index("reserved")->as_mapp();
 	/*access*/
-	cout<<root["students"]["wang"]<<endl;
-	cout<<root["teacher"][0][0]<<endl;
+	//cout<<root["students"]["wang"]<<endl;
+	//cout<<root["teacher"][0][0]<<endl;
 	/*data modify*/
 	//root["students"][0] = "francis"; 
 	//root["teacher"]["wang"]= "80";
     /*show whole table*/	
 	cout<<"-----whole file-----"<<endl;
-	if (teacher_array->empty()){
+	/*if (nullptr == teacher_array || teacher_array->empty()){
 		cout<<"teacher_array is empty"<<endl;
 	}
-	if (reserve_array->empty()){
+	if (nullptr == reserve_array || reserve_array->empty()){
 		cout<<"reserve_array is empty"<<endl;
-	}
+	}*/
+
 	root.show_table();
 }
 
@@ -89,7 +98,7 @@ int main(void)
 	//cout<<"------------access_and_structure_modify---------------"<<endl;
 	//access_and_structure_modify();
 	//cout<<"------------generator---------------"<<endl;
-	//generator();
+	generator();
 	
 	return 0;
 }

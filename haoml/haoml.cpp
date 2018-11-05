@@ -50,16 +50,20 @@ shared_ptr<arrayy> make_arrayy(void)
 parser and construct
 @param filename the filename which should be parsed
 @return a shared pointer of table, 
+\verbatim
 		inside, if object is mapp, it will return shared_ptr<mapp> when use as_mapp()
 				if object is arrayy, it will return shared_ptr<arrayy> when use as_arrayy()
 				if object is null, it will return nullptr either use as_mapp() or as_arrayy()
+\endverbatim
 @see class table
+@throws haoexception : haoml_error_code::file_error   open file error
+@throws	haoexception : haoml_error_code::format_error
 */
 shared_ptr<table> parser::build(const char *filename)
 {
 	ifstream fs(filename);
 	if (!fs.is_open()){
-		throw haoexception((string)"open file error, " + filename + ": " + strerror(errno));
+		throw haoexception(haoml_error_code::file_error, (string)"open file error, " + filename + ": " + strerror(errno));
 	}
 	shared_ptr<table> root = make_table();
 	shared_ptr<base> base_ptr;
@@ -105,14 +109,14 @@ shared_ptr<table> parser::build(const char *filename)
 		case '[':
 			end = line.rfind(']');
 			if (string::npos == end){
-				throw haoexception((string)"format error: " + line);
+				throw haoexception(haoml_error_code::format_error, (string)"format error: " + line);
 			}
 			if (!_table.empty()){
-				throw haoexception((string)"sorry! table can not be nested, current table is: " + _table);
+				throw haoexception(haoml_error_code::format_error, (string)"sorry! table can not be nested, current table is: " + _table);
 			}
 			_table = line.substr(start+1, end-start-1);
 			if (root->find(_table) != root->end()){//exsit
-				throw haoexception((string)"table is repeat : " + _table);
+				throw haoexception(haoml_error_code::format_error, (string)"table is repeat : " + _table);
 			}
 			tab_annot = annot;
 			annot.clear();
@@ -424,7 +428,7 @@ void table::write(const char *filename)
 	if (!ofs.is_open()){
 		cerr<<"open file error"<<endl;
 		//throw 
-		throw haoexception((string)"open file error," + filename + ": " + strerror(errno));
+		throw haoexception(haoml_error_code::format_error, (string)"open file error," + filename + ": " + strerror(errno));
 	}
 	ofs.write(out.c_str(), out.size());
 	ofs.close();
