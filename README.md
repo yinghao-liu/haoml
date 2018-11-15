@@ -33,13 +33,15 @@ li = 30
 
 ## Elements
 a haoml file is consist of several blocks which are delimited by a new line('\n'), each block 
-is one of the three types described below. 
+is one of the three types described below.  
+for mapp and arrayy, the first key character detemined the type of them, if there is no '=' 
+neither '|', then treat this line as '|' one(arrayy)
 
 ### comment
 only full-line comment is supported
 
 ### mapp
-a key-value pair 
+a key-value pair using '=' as separator
 
 ### arrayy
 strings delimited by '|'. if there is only one string, '|' can be omitted

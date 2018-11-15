@@ -142,12 +142,17 @@ shared_ptr<table> parser::build(const char *filename)
 	}
 	return root;	
 }
+/**
+ * the first key character detemined the type of a line, if there is no '=' neither '|',\n
+ * then treat this line as '|' one
+ *
+ */
 shared_ptr<base> parser::parser_data(string &data, string &annot, shared_ptr<base> &base_ptr)
 {
 	size_t delim;
 
 	delim = data.find('=');
-	if (string::npos != delim){//key-value mode
+	if (delim  < data.find('|')){//key-value mode, if there is no '=' neither '|', this situation do not match here
 		string key;
 		string value;
 		key = data.substr(0, delim);
