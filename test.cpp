@@ -72,7 +72,7 @@ void generator(void)
 	vector<string> member;
 	member.push_back("frank");
 	member.push_back("12");
-	students.append(member);
+	students.append(member, "information of frank");
 	member.clear();
 	member.push_back("evan");
 	member.push_back("10");
@@ -91,6 +91,34 @@ void generator(void)
 	root.show_table();
 	root.write("generator.haoml");
 }
+void generator2(void)
+{
+	table root;
+	root.set_annot("head declare");
+	auto &students = *root.to_arrayy("students");
+
+	students.set_annot("here is students,format is name|grade");
+	auto &a0 = students.append("information of frank");
+	a0.append("frank");
+	a0.append("12");
+	auto &a1 = students.append();
+	a1.append("evan");
+	a1.append("10");
+
+	auto &teacher = *root.to_mapp("teacher");
+	teacher.set_annot("format is name=age");
+	teacher["li"]   = "40";
+	teacher["wang"] = "32";
+
+	
+	auto &master = *root.to_mapp("master");;
+	master.set_annot("master format is name=age");
+	master.insert("feng", "33");
+	master.insert("chen", "44", "chen is 44 years old");
+	cout<<"-----whole file-----"<<endl;
+	root.show_table();
+	root.write("generator.haoml");
+}
 int main(void)
 {
 	cout<<"-------------access_and_data_modify--------------"<<endl;
@@ -98,7 +126,7 @@ int main(void)
 	//cout<<"------------access_and_structure_modify---------------"<<endl;
 	//access_and_structure_modify();
 	//cout<<"------------generator---------------"<<endl;
-	generator();
+	generator2();
 	
 	return 0;
 }

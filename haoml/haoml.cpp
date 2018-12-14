@@ -335,6 +335,8 @@ string arrayy::get_data(const string &table_name)
 }
 arrayvalue &arrayy::operator[](const size_t pos)
 {
+	int i;
+	i++;
 	return _arrayy[pos];	
 }
 void arrayy::append(vector<string> &data, const string &annot)
@@ -343,6 +345,17 @@ void arrayy::append(vector<string> &data, const string &annot)
 	value.set_annot(annot);
 	value._arrayvalue = data;
 	_arrayy.push_back(value);
+}
+/**
+ * append an element and return the reference
+ *
+ */
+arrayvalue &arrayy::append(const string &annot)
+{
+	arrayvalue value;
+	value.set_annot(annot);
+	_arrayy.push_back(value);
+	return _arrayy.back();
 }
 vector<arrayvalue>::iterator arrayy::erase(vector<arrayvalue>::iterator pos)
 {
@@ -381,7 +394,31 @@ base &table::operator[](const string &key)
 }
 shared_ptr<base> table::index(const string &key)
 {
+	try{
+		_table.at(key);
+	}catch (std::out_of_range){
+		_table[key] = make_base();
+	}
 	return _table[key];
+}
+shared_ptr<mapp> table::to_mapp(const string &key)
+{
+	try{
+		_table.at(key);
+	}catch(std::out_of_range){
+		_table[key] = make_mapp();
+	}
+	return index(key)->as_mapp();
+}
+
+shared_ptr<arrayy> table::to_arrayy(const string &key)
+{
+	try{
+		_table.at(key);
+	}catch(std::out_of_range){
+		_table[key] = make_arrayy();
+	}
+	return index(key)->as_arrayy();
 }
 bool table::is_null(const string &key)
 {

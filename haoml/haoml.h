@@ -125,6 +125,10 @@ struct arrayvalue : public comment{
 	{
 		return _arrayvalue[pos];
 	}
+	void append(string value)
+	{
+		_arrayvalue.push_back(value);
+	}
 };//end of arrayvalue
 
 class arrayy : public base{
@@ -134,6 +138,7 @@ public:
 	virtual arrayvalue &operator[](const size_t pos) override;
 
 	void append(vector<string> &data, const string &annot="");
+	arrayvalue &append(const string &annot="");
 	vector<arrayvalue>::iterator erase(vector<arrayvalue>::iterator pos);
 
 	void show_arrayy(const string &table_name);
@@ -153,6 +158,8 @@ public:
 	void write(const char *filename);
 	base &operator[](const string &key);
 	shared_ptr<base> index(const string &key);
+	shared_ptr<mapp> to_mapp(const string &key);
+	shared_ptr<arrayy> to_arrayy(const string &key);
 	bool is_null(const string &key);
 	void insert(const string &key, shared_ptr<base> ptr_base);
 	map<string, shared_ptr<base>>::iterator find(string &key);
