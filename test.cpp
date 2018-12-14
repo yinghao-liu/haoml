@@ -8,7 +8,7 @@ void access_and_data_modify(void)
 	parser config; 
 	shared_ptr<table> ptr;
 	try{
-		ptr = config.build("config1.haoml");
+		ptr = config.build("config.haoml");
 	}catch (haoexception  e){
 		if (haoml_error_code::file_error == e.code()){
 			cout<<e.what()<<endl;	
@@ -16,23 +16,22 @@ void access_and_data_modify(void)
 		}	
 	}
 	auto &root = *ptr;
-	//auto teacher_array=root.index("teacher")->as_arrayy();
-	//auto reserve_array=root.index("reserved")->as_mapp();
 	/*access*/
-	//cout<<root["students"]["wang"]<<endl;
-	//cout<<root["teacher"][0][0]<<endl;
+	cout<<root["students"]["wang"]<<endl;
+	cout<<root["teacher"][0][0]<<endl;
 	/*data modify*/
-	//root["students"][0] = "francis"; 
-	//root["teacher"]["wang"]= "80";
-    /*show whole table*/	
-	cout<<"-----whole file-----"<<endl;
-	/*if (nullptr == teacher_array || teacher_array->empty()){
-		cout<<"teacher_array is empty"<<endl;
+	try{
+		root["students"]["li"] = "31"; 
+		/* there is no element named "wang" in root["teacher"], 
+		 * and root["teacher"] is an arrayy, so, here should 
+		 * raise an exception
+		 */
+		root["teacher"]["wang"]= "80";
+	}catch (haoexception &e){
+		cout<<"access error"<<endl;
 	}
-	if (nullptr == reserve_array || reserve_array->empty()){
-		cout<<"reserve_array is empty"<<endl;
-	}*/
-
+	/*show whole table*/	
+	cout<<"whole file-----"<<endl;
 	root.show_table();
 }
 
@@ -64,37 +63,6 @@ void generator(void)
 {
 	table root;
 	root.set_annot("head declare");
-
-	auto ptr_stu = make_arrayy();
-	auto &students = *ptr_stu;
-
-	students.set_annot("here is students,format is name|grade");
-	vector<string> member;
-	member.push_back("frank");
-	member.push_back("12");
-	students.append(member, "information of frank");
-	member.clear();
-	member.push_back("evan");
-	member.push_back("10");
-	students.append(member);
-	root.insert("students", ptr_stu);
-
-
-	auto ptr_tea = make_mapp();
-	auto &teacher = *ptr_tea;
-	students.set_annot("format is name=age");
-	teacher.insert("li", "40");
-	teacher.insert("wang", "32", "wang is 32 years old");
-	root.insert("teacher", ptr_tea);
-
-	cout<<"-----whole file-----"<<endl;
-	root.show_table();
-	root.write("generator.haoml");
-}
-void generator2(void)
-{
-	table root;
-	root.set_annot("head declare");
 	auto &students = *root.to_arrayy("students");
 
 	students.set_annot("here is students,format is name|grade");
@@ -115,7 +83,7 @@ void generator2(void)
 	master.set_annot("master format is name=age");
 	master.insert("feng", "33");
 	master.insert("chen", "44", "chen is 44 years old");
-	cout<<"-----whole file-----"<<endl;
+	cout<<"-----whole file"<<endl;
 	root.show_table();
 	root.write("generator.haoml");
 }
@@ -125,8 +93,8 @@ int main(void)
 	access_and_data_modify();
 	//cout<<"------------access_and_structure_modify---------------"<<endl;
 	//access_and_structure_modify();
-	//cout<<"------------generator---------------"<<endl;
-	generator2();
+	cout<<"------------generator---------------"<<endl;
+	generator();
 	
 	return 0;
 }

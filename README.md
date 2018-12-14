@@ -50,7 +50,7 @@ strings delimited by '|'. if there is only one string, '|' can be omitted
 just copy `haoml.cpp` and `haoml.h` to your project, include `haoml.h` in your source code, and add
 target in your `Makefile` or any other files that can compile.
 
-here are some examples in [test.cpp](test.cpp), run `make && ./test` in root folder, to see the test result.
+here are some examples in [test.cpp](test.cpp), CRUD(create, retrieve, update, delete) are all supported. run `make && ./test` in root folder, to see the test result.
 
 ## Documentation
 [haoml documentation](https://yinghao-liu.github.io/haoml/) is generated using [Doxygen](http://www.doxygen.org).

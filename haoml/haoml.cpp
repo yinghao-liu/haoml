@@ -335,8 +335,6 @@ string arrayy::get_data(const string &table_name)
 }
 arrayvalue &arrayy::operator[](const size_t pos)
 {
-	int i;
-	i++;
 	return _arrayy[pos];	
 }
 void arrayy::append(vector<string> &data, const string &annot)

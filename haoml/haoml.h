@@ -88,7 +88,7 @@ public:
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
 	virtual string get_data(const string &table_name);
-	virtual string &operator[](const string &key){throw haoexception(haoml_error_code::access_error, (string)"no data can be accessed by ["+key+"]");}
+	virtual string &operator[](const string &key){throw haoexception(haoml_error_code::access_error, (string)"no data can be accessed by [\""+key+"\"]");}
 	virtual arrayvalue &operator[](const size_t pos){throw haoexception(haoml_error_code::access_error, "no data can be accessed by ["+std::to_string(pos)+"]");}
 
 	shared_ptr<mapp>  as_mapp(void);
@@ -161,12 +161,13 @@ public:
 	shared_ptr<mapp> to_mapp(const string &key);
 	shared_ptr<arrayy> to_arrayy(const string &key);
 	bool is_null(const string &key);
-	void insert(const string &key, shared_ptr<base> ptr_base);
 	map<string, shared_ptr<base>>::iterator find(string &key);
 	map<string, shared_ptr<base>>::iterator end(void);
 	map<string, shared_ptr<base>>::iterator begin(void);
+	friend shared_ptr<table> parser::build(const char *filename);
 protected:
 	virtual string get_data(void);
+	void insert(const string &key, shared_ptr<base> ptr_base);
 private:
 	map<string, shared_ptr<base>> _table;
 };//end of table
