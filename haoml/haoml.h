@@ -30,16 +30,14 @@ using std::string;
 using std::map;
 using std::vector;
 using std::shared_ptr;
-namespace haoml{
+namespace haoml {
 /**
- * file_error = 0 : file relevant exception code\n
- * format_error : format relevant exception code\n
- * access_error : operate [] access error of base
+ * haoml_error_code
  */
-enum class haoml_error_code:uint8_t{
-	file_error=0,
-	format_error,
-	access_error
+enum class haoml_error_code:uint8_t {
+	file_error=1,	///< file relevant exception code
+	format_error,	///< format relevant exception code
+	access_error	///< operate [] access error of base
 };
 
 class base;
@@ -54,19 +52,19 @@ extern shared_ptr<table> make_table(void);
 extern shared_ptr<mapp> make_mapp(void);
 extern shared_ptr<arrayy> make_arrayy(void);
 
-class haoexception : public exception{
+class haoexception : public exception {
 	public:
-		haoexception(const haoml_error_code &ecc, const string &err) : ec(ecc),message(err){}
-		virtual const char* what(void) const noexcept{return message.c_str();}
-		const haoml_error_code code(void) const noexcept{return ec;}
+		haoexception(const haoml_error_code &ecc, const string &err) : ec(ecc),message(err) {}
+		virtual const char* what(void) const noexcept {return message.c_str();}
+		const haoml_error_code code(void) const noexcept {return ec;}
 	private:
 		haoml_error_code ec;
 		string message;
 };
 
-class parser{
+class parser {
 public:
-	parser(void){};
+	parser(void) {};
 	parser& operator=(const parser &pa) = delete;
 	shared_ptr<table> build(const char *filename);
 protected:
@@ -75,7 +73,7 @@ protected:
 	vector<string> split(char delimit, const string &str);
 };//end class value
 
-class comment{
+class comment {
 public:
 	void set_annot(const string &annot);
 	string &get_annot(void);
@@ -83,24 +81,24 @@ private:
 	string annotation;
 };
 
-class base : public comment, public std::enable_shared_from_this<base>{
+class base : public comment, public std::enable_shared_from_this<base> {
 public:
 	virtual const bool is_mapp(void);
 	virtual const bool is_arrayy(void);
 	virtual string get_data(const string &table_name);
-	virtual string &operator[](const string &key){throw haoexception(haoml_error_code::access_error, (string)"no data can be accessed by [\""+key+"\"]");}
-	virtual arrayvalue &operator[](const size_t pos){throw haoexception(haoml_error_code::access_error, "no data can be accessed by ["+std::to_string(pos)+"]");}
+	virtual string &operator[](const string &key) {throw haoexception(haoml_error_code::access_error, (string)"no data can be accessed by [\""+key+"\"]");}
+	virtual arrayvalue &operator[](const size_t pos) {throw haoexception(haoml_error_code::access_error, "no data can be accessed by ["+std::to_string(pos)+"]");}
 
 	shared_ptr<mapp>  as_mapp(void);
 	shared_ptr<arrayy> as_arrayy(void);
 };//end of base
 
-struct mapvalue : public comment{
+struct mapvalue : public comment {
 	string _mapvalue;
 };//end of mapvalue
 
 
-class mapp  : public base{
+class mapp  : public base {
 public:
 	virtual const bool is_mapp(void) override;
 	virtual string get_data(const string &table_name) override;
@@ -115,7 +113,7 @@ private:
 	map<string, mapvalue> _mapp;
 };//end of mapp
 
-struct arrayvalue : public comment{
+struct arrayvalue : public comment {
 	vector<string> _arrayvalue;
 	string &operator[](const size_t pos)
 	{
@@ -131,7 +129,7 @@ struct arrayvalue : public comment{
 	}
 };//end of arrayvalue
 
-class arrayy : public base{
+class arrayy : public base {
 public:
 	virtual const bool is_arrayy(void) override;
 	virtual string get_data(const string &table_name) override;
@@ -149,7 +147,7 @@ private:
 	vector<arrayvalue> _arrayy;
 };//end of array
 
-class table : public comment{
+class table : public comment {
 public:
 	bool empty(void);
 	void show_table(void);

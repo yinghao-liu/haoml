@@ -25,7 +25,7 @@ using namespace haoml;
 using std::make_shared;
 
 ///namespace haoml
-namespace haoml{
+namespace haoml {
 
 shared_ptr<base> make_base(void)
 {
@@ -62,7 +62,7 @@ parser and construct
 shared_ptr<table> parser::build(const char *filename)
 {
 	ifstream fs(filename);
-	if (!fs.is_open()){
+	if (!fs.is_open()) {
 		throw haoexception(haoml_error_code::file_error, (string)"open file error, " + filename + ": " + strerror(errno));
 	}
 	shared_ptr<table> root = make_table();
@@ -75,16 +75,16 @@ shared_ptr<table> parser::build(const char *filename)
 	string tab_annot;
 	size_t start;
 	size_t end;
-	while (1){
+	while (1) {
 		getline(fs, line);
 		/*********here is end of a block or nothing************/	
-		if (0 == line.size()){
+		if (0 == line.size()) {
 			/****************config file head**********************/
-			if (root->empty() && !annot.empty()){
+			if (root->empty() && !annot.empty()) {
 				root->set_annot(annot);
 			}
-			if (!_table.empty()){
-				if (root->is_null(_table)){
+			if (!_table.empty()) {
+				if (root->is_null(_table)) {
 					root->insert(_table, make_base());
 				}
 				base_ptr->set_annot(tab_annot);
@@ -95,27 +95,27 @@ shared_ptr<table> parser::build(const char *filename)
 			}
 			annot.clear();
 
-			if (!fs.good()){
+			if (!fs.good()) {
 				break;
-			}else{
+			} else {
 				continue;
 			}
 		}
 
-		switch (line[start=line.find_first_not_of("\t ")]){
+		switch (line[start=line.find_first_not_of("\t ")]) {
 		case '#':
 			annot += line + '\n';
 			break;
 		case '[':
 			end = line.rfind(']');
-			if (string::npos == end){
+			if (string::npos == end) {
 				throw haoexception(haoml_error_code::format_error, (string)"format error: " + line);
 			}
-			if (!_table.empty()){
+			if (!_table.empty()) {
 				throw haoexception(haoml_error_code::format_error, (string)"sorry! table can not be nested, current table is: " + _table);
 			}
 			_table = line.substr(start+1, end-start-1);
-			if (root->find(_table) != root->end()){//exsit
+			if (root->find(_table) != root->end()) {//exsit
 				throw haoexception(haoml_error_code::format_error, (string)"table is repeat : " + _table);
 			}
 			tab_annot = annot;
@@ -123,19 +123,19 @@ shared_ptr<table> parser::build(const char *filename)
 			break;
 		default:
 			/*mixed type would return nullptr*/
-			if (nullptr == parser_data(line, annot, base_ptr)){
+			if (nullptr == parser_data(line, annot, base_ptr)) {
 				annot.clear();
 				continue;
 			}
 			annot.clear();
 
 			// data without a section([xxx]) ahead
-			if (_table.empty()){
+			if (_table.empty()) {
 				base_ptr.reset();
 				continue;
 			}
 			// if this line is the first one after a section
-			if(root->is_null(_table)){
+			if(root->is_null(_table)) {
 				root->insert(_table, base_ptr);
 			}
 		}
@@ -152,17 +152,17 @@ shared_ptr<base> parser::parser_data(string &data, string &annot, shared_ptr<bas
 	size_t delim;
 
 	delim = data.find('=');
-	if (delim  < data.find('|')){//key-value mode, if there is no '=' neither '|', this situation do not match here
+	if (delim  < data.find('|')) {//key-value mode, if there is no '=' neither '|', this situation do not match here
 		string key;
 		string value;
 		key = data.substr(0, delim);
 		value = data.substr(delim+1);
 		key = strip(key);
 		value = strip(value);
-		if (nullptr == base_ptr){
+		if (nullptr == base_ptr) {
 			base_ptr = make_mapp();
 		}
-		if (!base_ptr->is_mapp()){
+		if (!base_ptr->is_mapp()) {
 			cerr<<"mixed type"<<endl;
 			return nullptr;
 		}
@@ -174,10 +174,10 @@ shared_ptr<base> parser::parser_data(string &data, string &annot, shared_ptr<bas
 	//delim = data.find('|');
 	//if (string::npos != delim){//array mode
 
-	if (nullptr == base_ptr){
+	if (nullptr == base_ptr) {
 		base_ptr = make_arrayy();
 	}
-	if (!base_ptr->is_arrayy()){
+	if (!base_ptr->is_arrayy()) {
 		cerr<<"mixed type"<<endl;
 		return nullptr;
 	}
@@ -193,7 +193,7 @@ string parser::strip(string &str)
 	size_t last;
 	first = str.find_first_not_of(" \t");
 	last  = str.find_last_not_of(" \t");
-	if (string::npos != first){
+	if (string::npos != first) {
 		return str.substr(first, last-first+1);
 	}
 	return str.substr(0, 0);
@@ -210,7 +210,7 @@ vector<string> parser::split(char delimit, const string &str)
 	size_t end=0;
 	string sub;
 	vector<string> result;
-	while (string::npos != (end=str.find(delimit, start))){
+	while (string::npos != (end=str.find(delimit, start))) {
 		sub = str.substr(start, end-start);
 		result.push_back(sub);
 		start = end+1;
@@ -223,7 +223,7 @@ vector<string> parser::split(char delimit, const string &str)
 /**************comment***************/
 void comment::set_annot(const string &annot)
 {
-	if (annot.empty()){
+	if (annot.empty()) {
 		return;
 	}
 	annotation = ('#'==annot.front())?annot:("#" + annot);
@@ -254,7 +254,7 @@ string base::get_data(const string &table_name)
  */
 shared_ptr<mapp> base::as_mapp(void)
 {
-	if (is_mapp()){
+	if (is_mapp()) {
 		return static_pointer_cast<mapp>(shared_from_this());
 	}
 	return nullptr;
@@ -264,7 +264,7 @@ shared_ptr<mapp> base::as_mapp(void)
  */
 shared_ptr<arrayy> base::as_arrayy(void)
 {
-	if (is_arrayy()){
+	if (is_arrayy()) {
 		return static_pointer_cast<arrayy>(shared_from_this());
 	}
 	return nullptr;
@@ -279,7 +279,7 @@ string mapp::get_data(const string &table_name)
 {
 	string mapp_out = get_annot();
 	mapp_out += "[" + table_name + "]" + '\n';
-	for (auto &i : _mapp){
+	for (auto &i : _mapp) {
 		mapp_out += i.second.get_annot();
 		mapp_out += i.first + "=" + i.second._mapvalue + '\n';
 	}
@@ -320,9 +320,9 @@ string arrayy::get_data(const string &table_name)
 	string arrayy_out = get_annot();
 	arrayy_out += "[" + table_name + "]" + '\n';
 
-	for (auto &i : _arrayy){
+	for (auto &i : _arrayy) {
 		arrayy_out += i.get_annot();
-		for (auto &j : i._arrayvalue){
+		for (auto &j : i._arrayvalue) {
 			arrayy_out += j;
 			arrayy_out += '|';
 		}
@@ -392,18 +392,18 @@ base &table::operator[](const string &key)
 }
 shared_ptr<base> table::index(const string &key)
 {
-	try{
+	try {
 		_table.at(key);
-	}catch (std::out_of_range){
+	} catch (std::out_of_range) {
 		_table[key] = make_base();
 	}
 	return _table[key];
 }
 shared_ptr<mapp> table::to_mapp(const string &key)
 {
-	try{
+	try {
 		_table.at(key);
-	}catch(std::out_of_range){
+	} catch(std::out_of_range) {
 		_table[key] = make_mapp();
 	}
 	return index(key)->as_mapp();
@@ -411,9 +411,9 @@ shared_ptr<mapp> table::to_mapp(const string &key)
 
 shared_ptr<arrayy> table::to_arrayy(const string &key)
 {
-	try{
+	try {
 		_table.at(key);
-	}catch(std::out_of_range){
+	} catch(std::out_of_range) {
 		_table[key] = make_arrayy();
 	}
 	return index(key)->as_arrayy();
@@ -446,7 +446,7 @@ string table::get_data(void)
 {
 	string table_out = get_annot();
 	table_out += table_out.empty()? "" : "\n";
-	for (auto &i : _table){
+	for (auto &i : _table) {
 		table_out += i.second->get_data(i.first);
 	}
 	return table_out;
@@ -465,7 +465,7 @@ void table::write(const char *filename)
 {
 	string out = get_data();
 	ofstream ofs(filename, ofstream::out|ofstream::trunc);
-	if (!ofs.is_open()){
+	if (!ofs.is_open()) {
 		cerr<<"open file error"<<endl;
 		//throw 
 		throw haoexception(haoml_error_code::format_error, (string)"open file error," + filename + ": " + strerror(errno));

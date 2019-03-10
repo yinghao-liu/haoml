@@ -7,10 +7,10 @@ void access_and_data_modify(void)
 {
 	parser config; 
 	shared_ptr<table> ptr;
-	try{
+	try {
 		ptr = config.build("config.haoml");
-	}catch (haoexception  e){
-		if (haoml_error_code::file_error == e.code()){
+	} catch (haoexception  e) {
+		if (haoml_error_code::file_error == e.code()) {
 			cout<<e.what()<<endl;	
 			return;
 		}	
@@ -20,14 +20,14 @@ void access_and_data_modify(void)
 	cout<<root["students"]["wang"]<<endl;
 	cout<<root["teacher"][0][0]<<endl;
 	/*data modify*/
-	try{
+	try {
 		root["students"]["li"] = "31"; 
 		/* there is no element named "wang" in root["teacher"], 
 		 * and root["teacher"] is an arrayy, so, here should 
 		 * raise an exception
 		 */
 		root["teacher"]["wang"]= "80";
-	}catch (haoexception &e){
+	} catch (haoexception &e) {
 		cout<<"access error"<<endl;
 	}
 	/*show whole table*/	
@@ -41,14 +41,14 @@ void access_and_structure_modify(void)
 	auto ptr = config.build("config.haoml");
 	auto &root = *ptr;
 
-	if (root["students"].is_arrayy()){
+	if (root["students"].is_arrayy()) {
 		cout<<"students is arrayy"<<endl;
 	}
 	auto &arra = *root["students"].as_arrayy();
-	for(auto i=arra.begin(); i!=arra.end(); ){
-		if ("100" != i->index(2)){
+	for (auto i=arra.begin(); i!=arra.end(); ) {
+		if ("100" != i->index(2)) {
 			i=arra.erase(i);
-		}else{
+		} else {
 			i++;
 		}
 	}

@@ -81,8 +81,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a693e773c4e931ccf221e49160a0da31f"><td class="memItemLeft" align="right" valign="top"><a id="a693e773c4e931ccf221e49160a0da31f"></a>
-shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parser_data</b> (string &amp;data, string &amp;annot, shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt; &amp;base_ptr)</td></tr>
+<tr class="memitem:a693e773c4e931ccf221e49160a0da31f"><td class="memItemLeft" align="right" valign="top">shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhaoml_1_1parser.html#a693e773c4e931ccf221e49160a0da31f">parser_data</a> (string &amp;data, string &amp;annot, shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt; &amp;base_ptr)</td></tr>
 <tr class="separator:a693e773c4e931ccf221e49160a0da31f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a718e5676ecd5429cef52a06ba05ab296"><td class="memItemLeft" align="right" valign="top"><a id="a718e5676ecd5429cef52a06ba05ab296"></a>
 string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhaoml_1_1parser.html#a718e5676ecd5429cef52a06ba05ab296">strip</a> (string &amp;str)</td></tr>
@@ -120,11 +119,55 @@ string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <dl class="section see"><dt>See also</dt><dd>class <a class="el" href="classhaoml_1_1table.html">table</a> </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">haoexception</td><td>: haoml_error_code::file_error open file error </td></tr>
-    <tr><td class="paramname">haoexception</td><td>: haoml_error_code::format_error </td></tr>
+    <tr><td class="paramname">haoexception</td><td>: <a class="el" href="namespacehaoml.html#ae3c65e1120bebd2943bd5959a1733414af91ec15ddab2e0c740d311f7c4a6613a" title="file relevant exception code ">haoml_error_code::file_error</a> open file error </td></tr>
+    <tr><td class="paramname">haoexception</td><td>: <a class="el" href="namespacehaoml.html#ae3c65e1120bebd2943bd5959a1733414a0f045e5fc756540d919108e3229df7cb" title="format relevant exception code ">haoml_error_code::format_error</a> </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a693e773c4e931ccf221e49160a0da31f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a693e773c4e931ccf221e49160a0da31f">&#9670;&nbsp;</a></span>parser_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt; parser::parser_data </td>
+          <td>(</td>
+          <td class="paramtype">string &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string &amp;&#160;</td>
+          <td class="paramname"><em>annot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>base_ptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>the first key character detemined the type of a line, if there is no '=' neither '|',<br />
+then treat this line as '|' one </p>
 
 </div>
 </div>

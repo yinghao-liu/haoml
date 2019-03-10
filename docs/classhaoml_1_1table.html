@@ -65,6 +65,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classhaoml_1_1table-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">haoml::table Class Reference</div>  </div>
@@ -75,7 +76,6 @@ Inheritance diagram for haoml::table:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhaoml_1_1table__inherit__graph.png" border="0" usemap="#haoml_1_1table_inherit__map" alt="Inheritance graph"/></div>
 <map name="haoml_1_1table_inherit__map" id="haoml_1_1table_inherit__map">
-<area shape="rect" id="node2" href="classhaoml_1_1comment.html" title="haoml::comment" alt="" coords="5,5,139,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -102,12 +102,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a2e1d33f0a9c1872644bd9fde5fc46c79"><td class="memItemLeft" align="right" valign="top"><a id="a2e1d33f0a9c1872644bd9fde5fc46c79"></a>
 shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>index</b> (const string &amp;key)</td></tr>
 <tr class="separator:a2e1d33f0a9c1872644bd9fde5fc46c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f8c82fa15989b4945ed49728bbc0479"><td class="memItemLeft" align="right" valign="top"><a id="a9f8c82fa15989b4945ed49728bbc0479"></a>
+shared_ptr&lt; <a class="el" href="classhaoml_1_1mapp.html">mapp</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>to_mapp</b> (const string &amp;key)</td></tr>
+<tr class="separator:a9f8c82fa15989b4945ed49728bbc0479"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a155eb6be753faa19f2f9ce168ab49f39"><td class="memItemLeft" align="right" valign="top"><a id="a155eb6be753faa19f2f9ce168ab49f39"></a>
+shared_ptr&lt; <a class="el" href="classhaoml_1_1arrayy.html">arrayy</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>to_arrayy</b> (const string &amp;key)</td></tr>
+<tr class="separator:a155eb6be753faa19f2f9ce168ab49f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13623708a0e3f7af85e8ba97c83ada5d"><td class="memItemLeft" align="right" valign="top"><a id="a13623708a0e3f7af85e8ba97c83ada5d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_null</b> (const string &amp;key)</td></tr>
 <tr class="separator:a13623708a0e3f7af85e8ba97c83ada5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61e35651f4d104c4f9c8a7b951562d86"><td class="memItemLeft" align="right" valign="top"><a id="a61e35651f4d104c4f9c8a7b951562d86"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const string &amp;key, shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt; ptr_base)</td></tr>
-<tr class="separator:a61e35651f4d104c4f9c8a7b951562d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf755650242e2216ebac9b11f07c97e"><td class="memItemLeft" align="right" valign="top"><a id="abdf755650242e2216ebac9b11f07c97e"></a>
 map&lt; string, shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt; &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>find</b> (string &amp;key)</td></tr>
 <tr class="separator:abdf755650242e2216ebac9b11f07c97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,6 +133,15 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a9d3850e418d849674fd9172f4a087e62"><td class="memItemLeft" align="right" valign="top"><a id="a9d3850e418d849674fd9172f4a087e62"></a>
 virtual string&#160;</td><td class="memItemRight" valign="bottom"><b>get_data</b> (void)</td></tr>
 <tr class="separator:a9d3850e418d849674fd9172f4a087e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61e35651f4d104c4f9c8a7b951562d86"><td class="memItemLeft" align="right" valign="top"><a id="a61e35651f4d104c4f9c8a7b951562d86"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const string &amp;key, shared_ptr&lt; <a class="el" href="classhaoml_1_1base.html">base</a> &gt; ptr_base)</td></tr>
+<tr class="separator:a61e35651f4d104c4f9c8a7b951562d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a36cbe293ffd51a302c536b51ae01a169"><td class="memItemLeft" align="right" valign="top"><a id="a36cbe293ffd51a302c536b51ae01a169"></a>
+shared_ptr&lt; <a class="el" href="classhaoml_1_1table.html">table</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parser::build</b> (const char *filename)</td></tr>
+<tr class="separator:a36cbe293ffd51a302c536b51ae01a169"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab4cf1b7049be4d3ddbe1ec20a5dd2a17"></a>
